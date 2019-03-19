@@ -1,19 +1,19 @@
 package org.janaylzer.gc.cms.phase;
 
-import org.janaylzer.gc.GCData;
 import org.janaylzer.gc.GCPhase;
-import org.janaylzer.gc.GCType;
+import org.janaylzer.util.Optional;
 import org.janaylzer.util.StringUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.janaylzer.util.Constants.*;
+import static org.janaylzer.util.Constants.CMS_CONCURRENT_PRECLEAN;
+import static org.janaylzer.util.Constants.CMS_CONCURRENT_PRECLEAN_DURATION;
 
 /**
  * @Author: Tboy
  */
-public class CMSConcurrentPrecleanPhase implements Phase {
+public class CMSConcurrentPrecleanPhase implements Phase<Optional<GCPhase>> {
 
     public static final String CMS_CONCURRENT_PRECLEAN_PHASE = ".*" +
             CMS_CONCURRENT_PRECLEAN +
@@ -24,27 +24,23 @@ public class CMSConcurrentPrecleanPhase implements Phase {
     public static final Pattern CMS_CONCURRENT_PRECLEAN_PATTERN = Pattern.compile(CMS_CONCURRENT_PRECLEAN_PHASE);
 
     @Override
-    public void action(String message, GCData data) {
+    public Optional<GCPhase> action(String message) {
         if(!message.contains(CMS_CONCURRENT_PRECLEAN)){
-            return;
+            return Optional.empty();
         }
         Matcher matcher = CMS_CONCURRENT_PRECLEAN_PATTERN.matcher(message);
         if (!matcher.find()) {
-            return;
+            return Optional.empty();
         }
 
+        GCPhase phase = new GCPhase(CMSPhase.CMS_CONCURRENT_PRECLEAN);
+        //
         String concurrentPrecleanPhase;
         if (StringUtils.isNotEmpty(concurrentPrecleanPhase = matcher.group(CMS_CONCURRENT_PRECLEAN_DURATION))) {
-            data.addProperties(CMS_CONCURRENT_PRECLEAN_DURATION, concurrentPrecleanPhase);
+            phase.addProperties(CMS_CONCURRENT_PRECLEAN_DURATION, concurrentPrecleanPhase);
         }
         //
-        data.setType(GCType.CMS);
-        data.setPhase(name());
-    }
-
-    @Override
-    public GCPhase name() {
-        return GCPhase.CMS_CONCURRENT_PRECLEAN;
+        return Optional.of(phase);
     }
 
 }

@@ -1,8 +1,7 @@
 package org.janaylzer.gc.cms.phase;
 
-import org.janaylzer.gc.GCData;
 import org.janaylzer.gc.GCPhase;
-import org.janaylzer.gc.GCType;
+import org.janaylzer.util.Optional;
 import org.janaylzer.util.StringUtils;
 
 import java.util.regex.Matcher;
@@ -13,7 +12,7 @@ import static org.janaylzer.util.Constants.*;
 /**
  * @Author: Tboy
  */
-public class CMSFinalRemarkPhase implements Phase {
+public class CMSFinalRemarkPhase implements Phase<Optional<GCPhase>> {
 
     public static final String FINAL_REMARK_PHASE = ".*" +
             CMS_FINAL_REMARK +
@@ -42,58 +41,55 @@ public class CMSFinalRemarkPhase implements Phase {
     public static final Pattern FINAL_REMARK__PATTERN = Pattern.compile(FINAL_REMARK_PHASE);
 
     @Override
-    public void action(String message, GCData data) {
+    public Optional<GCPhase> action(String message) {
         if(!message.contains(CMS_FINAL_REMARK)){
-            return;
+            return Optional.empty();
         }
         Matcher matcher = FINAL_REMARK__PATTERN.matcher(message);
         if (!matcher.find()) {
-            return;
+            return Optional.empty();
         }
+
+        GCPhase phase = new GCPhase(CMSPhase.CMS_FINAL_REMARK);
+        //
         String youngUsage;
         if(StringUtils.isNotEmpty(youngUsage = matcher.group(YOUNG_USAGE))){
-            data.addProperties(YOUNG_USAGE, youngUsage);
+            phase.addProperties(YOUNG_USAGE, youngUsage);
         }
         String youngSize;
         if(StringUtils.isNotEmpty(youngSize = matcher.group(YOUNG_SIZE))){
-            data.addProperties(YOUNG_SIZE, youngSize);
+            phase.addProperties(YOUNG_SIZE, youngSize);
         }
         String rescanDuration;
         if(StringUtils.isNotEmpty(rescanDuration = matcher.group(CMS_RESCAN_DURATION))){
-            data.addProperties(CMS_RESCAN_DURATION, rescanDuration);
+            phase.addProperties(CMS_RESCAN_DURATION, rescanDuration);
         }
         String weakRefsProcessingDuration;
         if(StringUtils.isNotEmpty(weakRefsProcessingDuration = matcher.group(CMS_WEAK_REFS_PROCESSING_DURATION))){
-            data.addProperties(CMS_WEAK_REFS_PROCESSING_DURATION, weakRefsProcessingDuration);
+            phase.addProperties(CMS_WEAK_REFS_PROCESSING_DURATION, weakRefsProcessingDuration);
         }
         String oldUsageAfter;
         if(StringUtils.isNotEmpty(oldUsageAfter = matcher.group(OLD_USAGE_AFTER))){
-            data.addProperties(OLD_USAGE_AFTER, oldUsageAfter);
+            phase.addProperties(OLD_USAGE_AFTER, oldUsageAfter);
         }
         String oldSize;
         if(StringUtils.isNotEmpty(oldSize = matcher.group(OLD_SIZE))){
-            data.addProperties(OLD_SIZE, oldSize);
+            phase.addProperties(OLD_SIZE, oldSize);
         }
         String heapUsageAfter;
         if(StringUtils.isNotEmpty(heapUsageAfter = matcher.group(HEAP_USAGE_AFTER))){
-            data.addProperties(HEAP_USAGE_AFTER, heapUsageAfter);
+            phase.addProperties(HEAP_USAGE_AFTER, heapUsageAfter);
         }
         String heapSize;
         if(StringUtils.isNotEmpty(heapSize = matcher.group(HEAP_SIZE))){
-            data.addProperties(HEAP_SIZE, heapSize);
+            phase.addProperties(HEAP_SIZE, heapSize);
         }
         String finalRemarkDuration;
         if(StringUtils.isNotEmpty(finalRemarkDuration = matcher.group(CMS_FINAL_REMARK_DURATION))){
-            data.addProperties(CMS_FINAL_REMARK_DURATION, finalRemarkDuration);
+            phase.addProperties(CMS_FINAL_REMARK_DURATION, finalRemarkDuration);
         }
         //
-        data.setType(GCType.CMS);
-        data.setPhase(name());
-    }
-
-    @Override
-    public GCPhase name() {
-        return GCPhase.CMS_FINAL_REMARK;
+        return Optional.of(phase);
     }
 
 }

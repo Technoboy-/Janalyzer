@@ -1,9 +1,11 @@
 package org.janaylzer.gc.cms;
 
-import org.janaylzer.gc.GCData;
+import org.janaylzer.gc.GCPhase;
 import org.janaylzer.gc.cms.phase.*;
+import org.janaylzer.util.Optional;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -23,17 +25,15 @@ public class CMSPhaseChain implements PhaseChain {
         phases.add(new CMSConcurrentResetPhase());
     }
 
-    public List<Phase> getPhases() {
-        return phases;
-    }
-
-    public void addPhase(Phase phase){
-        phases.add(phase);
-    }
-
-    public void doAction(String message, GCData data){
-        for(Phase phase : phases){
-            phase.action(message, data);
+    @Override
+    public List<GCPhase> doPhase(String message) {
+        List<GCPhase> gcPhases = new LinkedList<>();
+        for(Phase phaseAction : phases){
+            Optional<GCPhase> phase = (Optional<GCPhase>)phaseAction.action(message);
+            if(phase.isPresent()){
+                gcPhases.add(phase.get());
+            }
         }
+        return gcPhases;
     }
 }

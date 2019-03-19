@@ -3,7 +3,7 @@ package org.janaylzer.gc;
 /**
  * @Author: Tboy
  */
-public interface GCAction {
+public interface GCAction<T> {
 
-    void action(String message, GCData data);
+    T action(String message);
 }

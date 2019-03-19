@@ -1,4 +1,4 @@
-package org.janaylzer.gc.parallel.scavenge;
+package org.janaylzer.gc.serial;
 
 import org.janaylzer.gc.GCAction;
 import org.janaylzer.gc.GCData;
@@ -14,47 +14,49 @@ import static org.janaylzer.util.Constants.*;
 /**
  * @Author: Tboy
  */
-public class ParallelScavengeAction implements GCAction<Optional<GCData>> {
+public class SerialAction implements GCAction<Optional<GCData>> {
 
-    public static final String PARALLEL_SCAVENGE_ACTION =
+    public static final String SERIAL_ACTION =
             ".*\\[GC\\s\\((?<" +
-            PARALLEL_SCAVENGE_CAUTION +
-            ">.*)\\)\\s\\[" +
-            PARALLEL_SCAVENGE +
+            SERIAL_CAUTION +
+            ">.*)\\).*\\["+
+            SERIAL +
             ":\\s(?<" +
             YOUNG_USAGE_BEFORE +
             ">\\d+\\w)->(?<" +
             YOUNG_USAGE_AFTER +
             ">\\d+\\w)\\((?<" +
             YOUNG_SIZE +
-            ">\\d+\\w)\\)\\]\\s(?<" +
+            ">\\d+\\w)\\),\\s(?<" +
+            SERIAL_YOUNG_DURATION +
+            ">\\d+\\.\\d+)\\ssecs\\]" +
+            "\\s(?<" +
             HEAP_USAGE_BEFORE +
             ">\\d+\\w)->(?<" +
             HEAP_USAGE_AFTER +
             ">\\d+\\w)\\((?<" +
             HEAP_SIZE +
             ">\\d+\\w)\\),\\s(?<" +
-            PARALLEL_SCAVENGE_DURATION +
-            ">\\d+.\\d+)\\ssecs\\]";
+            SERIAL_DURATION +
+            ">\\d+\\.\\d+)\\ssecs\\]";
 
-    private static final Pattern PARALLEL_SCAVENGE_PATTERN = Pattern.compile(PARALLEL_SCAVENGE_ACTION);
-
+    private static final Pattern SERIAL_PATTERN = Pattern.compile(SERIAL_ACTION);
 
     @Override
     public Optional<GCData> action(String message) {
-        if(!message.contains(PARALLEL_SCAVENGE)){
+        if(!message.contains(SERIAL)){
             return Optional.empty();
         }
-        Matcher matcher = PARALLEL_SCAVENGE_PATTERN.matcher(message);
+        Matcher matcher = SERIAL_PATTERN.matcher(message);
         if (!matcher.find()) {
             return Optional.empty();
         }
 
-        GCData data = new GCData(GCType.PARALLEL_SCAVENGE);
+        GCData data = new GCData(GCType.SERIAL);
 
         String caution;
-        if (StringUtils.isNotEmpty(caution = matcher.group(PARALLEL_SCAVENGE_CAUTION))) {
-            data.addProperties(PARALLEL_SCAVENGE_CAUTION, caution);
+        if (StringUtils.isNotEmpty(caution = matcher.group(SERIAL_CAUTION))) {
+            data.addProperties(SERIAL_CAUTION, caution);
         }
         String youngUsageBefore;
         if (StringUtils.isNotEmpty(youngUsageBefore = matcher.group(YOUNG_USAGE_BEFORE))) {
@@ -68,6 +70,11 @@ public class ParallelScavengeAction implements GCAction<Optional<GCData>> {
         if (StringUtils.isNotEmpty(youngSize = matcher.group(YOUNG_SIZE))) {
             data.addProperties(YOUNG_SIZE, youngSize);
         }
+        String youngDuration;
+        if (StringUtils.isNotEmpty(youngDuration = matcher.group(SERIAL_YOUNG_DURATION))) {
+            data.addProperties(SERIAL_YOUNG_DURATION, youngDuration);
+        }
+
         String heapUsageBefore;
         if (StringUtils.isNotEmpty(heapUsageBefore = matcher.group(HEAP_USAGE_BEFORE))) {
             data.addProperties(HEAP_USAGE_BEFORE, heapUsageBefore);
@@ -81,8 +88,8 @@ public class ParallelScavengeAction implements GCAction<Optional<GCData>> {
             data.addProperties(HEAP_SIZE, heapSize);
         }
         String duration;
-        if (StringUtils.isNotEmpty(duration = matcher.group(PARALLEL_SCAVENGE_DURATION))) {
-            data.addProperties(PARALLEL_SCAVENGE_DURATION, duration);
+        if (StringUtils.isNotEmpty(duration = matcher.group(SERIAL_DURATION))) {
+            data.addProperties(SERIAL_DURATION, duration);
         }
         //
         return Optional.of(data);

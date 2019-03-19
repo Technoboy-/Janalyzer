@@ -1,22 +1,45 @@
 package org.janaylzer.gc;
 
+import org.janaylzer.gc.cms.phase.CMSPhase;
+
+import java.io.Serializable;
+import java.util.Map;
+import java.util.TreeMap;
+
 /**
  * @Author: Tboy
  */
-public enum GCPhase {
+public class GCPhase implements Serializable {
 
-    CMS_INITIAL_MARK,
+    private CMSPhase phase;
 
-    CMS_CONCURRENT_MARK,
+    private Map<String, String> properties = new TreeMap<>();
 
-    CMS_CONCURRENT_PRECLEAN,
+    public GCPhase() {
+        //NOP
+    }
 
-    CMS_CONCURRENT_ABORTABLE_PRECLEAN,
+    public GCPhase(CMSPhase phase) {
+        this.phase = phase;
+    }
 
-    CMS_CONCURRENT_SWEEP,
+    public Map<String, String> getProperties() {
+        return properties;
+    }
 
-    CMS_CONCURRENT_RESET,
+    public void setProperties(Map<String, String> properties) {
+        this.properties = properties;
+    }
 
-    CMS_FINAL_REMARK;
+    public void addProperties(String key, String value) {
+        this.properties.put(key, value);
+    }
 
+    @Override
+    public String toString() {
+        return "GCPhase{" +
+                "phase=" + phase +
+                ", properties=" + properties +
+                '}';
+    }
 }

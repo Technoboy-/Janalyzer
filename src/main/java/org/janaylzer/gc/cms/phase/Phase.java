@@ -1,14 +1,10 @@
 package org.janaylzer.gc.cms.phase;
 
-import org.janaylzer.gc.GCData;
-import org.janaylzer.gc.GCPhase;
-
 /**
  * @Author: Tboy
  */
-public interface Phase {
+public interface Phase<T> {
 
-    void action(String message, GCData data);
+    T action(String message);
 
-    GCPhase name();
 }

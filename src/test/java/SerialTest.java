@@ -1,6 +1,7 @@
 import org.janaylzer.gc.GCData;
-import org.janaylzer.gc.parallel.scavenge.ParallelScavengeAction;
 import org.janaylzer.gc.parnew.ParNewGCAction;
+import org.janaylzer.gc.serial.SerialAction;
+import org.janaylzer.gc.serial.SerialOldAction;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -12,11 +13,11 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * @Author: Tboy
  */
-public class ParallelScavengeTest {
+public class SerialTest {
 
 
     /**
-     * -XX:+PrintGCDetails -XX:+UseParallelGC -Xms5m -XX:+PrintGCDateStamps
+     * -XX:+PrintGCDetails -XX:+UseSerialGC -Xms5m -XX:+PrintGCDateStamps
      */
     @Test
     public void generateGCLog(){
@@ -47,14 +48,21 @@ public class ParallelScavengeTest {
         }
     }
 
-
     @Test
-    public void testParallelScavenge() {
-        String message = "2019-03-19T11:40:47.801-0800: [GC (Allocation Failure) [PSYoungGen: 4497K->448K(4608K)] 1233088K->1229039K(1402880K), 0.8331384 secs] [Times: user=4.98 sys=0.40, real=0.83 secs]";
+    public void testSerial() {
+        String message = "[GC (Allocation Failure) 2019-03-19T15:28:10.319-0800: [DefNew: 937K->0K(1920K), 0.0014898 secs] 2631K->2631K(6016K), 0.0015103 secs] [Times: user=0.01 sys=0.00, real=0.01 secs]";
 
-        ParallelScavengeAction phase = new ParallelScavengeAction();
+        SerialAction phase = new SerialAction();
+
         System.out.println(phase.action(message));
     }
 
+    @Test
+    public void testSerialOld() {
+        String message = "2019-03-19T15:29:06.077-0800: [Full GC (Allocation Failure) 2019-03-19T15:29:06.077-0800: [Tenured: 616743K->616682K(1398144K), 0.7188938 secs] 616743K->616682K(2000064K), [Metaspace: 4582K->4582K(1056768K)], 0.7190180 secs] [Times: user=0.72 sys=0.00, real=0.72 secs]";
 
+        SerialOldAction phase = new SerialOldAction();
+
+        System.out.println(phase.action(message));
+    }
 }

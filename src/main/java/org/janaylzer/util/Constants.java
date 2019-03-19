@@ -23,7 +23,6 @@ public class Constants {
 
     public static final String CMS_INITIAL_MARK_DURATION = "CMSInitialMarkDuration";
 
-
     //CMS concurrent mark
     public static final String CMS_CONCURRENT_MARK = "CMS-concurrent-mark";
 
@@ -58,6 +57,13 @@ public class Constants {
 
     public static final String CMS_CONCURRENT_RESET_DURATION = "CMSConcurrentResetDuration";
 
+    //CMS full GC
+    public static final String CMS_FULL_GC = "CMS";
+
+    public static final String CMS_FULL_GC_CAUTION = "CMSFullGCCaution";
+
+    public static final String CMS_FULL_GC_DURATION = "CMSFullGCDuration";
+
     //parallel scavenge
     public static final String PARALLEL_SCAVENGE = "PSYoungGen";
 
@@ -72,13 +78,23 @@ public class Constants {
 
     public static final String PARALLEL_OLD_DURATION = "ParallelOldDuration";
 
+    //serial
+    public static final String SERIAL = "DefNew";
 
-    //heap
-    public static final String HEAP_USAGE_BEFORE = "HeapUsageBefore";
+    public static final String SERIAL_CAUTION = "SerialCaution";
 
-    public static final String HEAP_USAGE_AFTER = "HeapUsageAfter";
+    public static final String SERIAL_YOUNG_DURATION = "SerialYoungDuration";
 
-    public static final String HEAP_SIZE = "HeapSize";
+    public static final String SERIAL_DURATION = "SerialDuration";
+
+    //serial old
+    public static final String SERIAL_OLD = "Tenured";
+
+    public static final String SERIAL_OLD_CAUTION = "SerialOldCaution";
+
+    public static final String SERIAL_OLD_CLEANUP_OLD_DURATION = "SerialOLDCleanupOldDuration";
+
+    public static final String SERIAL_OLD_DURATION = "SerialOLDDuration";
 
     //young
     public static final String YOUNG_USAGE = "YoungUsage";
@@ -96,5 +112,10 @@ public class Constants {
 
     public static final String OLD_SIZE = "OldSize";
 
+    //heap
+    public static final String HEAP_USAGE_BEFORE = "HeapUsageBefore";
 
+    public static final String HEAP_USAGE_AFTER = "HeapUsageAfter";
+
+    public static final String HEAP_SIZE = "HeapSize";
 }

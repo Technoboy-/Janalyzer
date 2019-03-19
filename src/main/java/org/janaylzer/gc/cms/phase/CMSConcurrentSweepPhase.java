@@ -1,8 +1,7 @@
 package org.janaylzer.gc.cms.phase;
 
-import org.janaylzer.gc.GCData;
 import org.janaylzer.gc.GCPhase;
-import org.janaylzer.gc.GCType;
+import org.janaylzer.util.Optional;
 import org.janaylzer.util.StringUtils;
 
 import java.util.regex.Matcher;
@@ -14,7 +13,7 @@ import static org.janaylzer.util.Constants.CMS_CONCURRENT_SWEEP_DURATION;
 /**
  * @Author: Tboy
  */
-public class CMSConcurrentSweepPhase implements Phase {
+public class CMSConcurrentSweepPhase implements Phase<Optional<GCPhase>> {
 
     public static final String CONCURRENT_SWEEP_PHASE = ".*" +
             CMS_CONCURRENT_SWEEP +
@@ -25,25 +24,21 @@ public class CMSConcurrentSweepPhase implements Phase {
     public static final Pattern CONCURRENT_SWEEP_PATTERN = Pattern.compile(CONCURRENT_SWEEP_PHASE);
 
     @Override
-    public void action(String message, GCData data) {
+    public Optional<GCPhase> action(String message) {
         if(!message.contains(CMS_CONCURRENT_SWEEP)){
-            return;
+            return Optional.empty();
         }
         Matcher matcher = CONCURRENT_SWEEP_PATTERN.matcher(message);
         if (!matcher.find()) {
-            return;
+            return Optional.empty();
         }
+        GCPhase phase = new GCPhase(CMSPhase.CMS_CONCURRENT_SWEEP);
+        //
         String concurrentSweepDuration;
         if (StringUtils.isNotEmpty(concurrentSweepDuration = matcher.group(CMS_CONCURRENT_SWEEP_DURATION))) {
-            data.addProperties(CMS_CONCURRENT_SWEEP_DURATION, concurrentSweepDuration);
+            phase.addProperties(CMS_CONCURRENT_SWEEP_DURATION, concurrentSweepDuration);
         }
         //
-        data.setType(GCType.CMS);
-        data.setPhase(name());
-    }
-
-    @Override
-    public GCPhase name() {
-        return GCPhase.CMS_CONCURRENT_SWEEP;
+        return Optional.of(phase);
     }
 }

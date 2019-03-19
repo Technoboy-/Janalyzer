@@ -1,8 +1,7 @@
 package org.janaylzer.gc.cms.phase;
 
-import org.janaylzer.gc.GCData;
 import org.janaylzer.gc.GCPhase;
-import org.janaylzer.gc.GCType;
+import org.janaylzer.util.Optional;
 import org.janaylzer.util.StringUtils;
 
 import java.util.regex.Matcher;
@@ -14,7 +13,7 @@ import static org.janaylzer.util.Constants.CMS_CONCURRENT_MARK_DURATION;
 /**
  * @Author: Tboy
  */
-public class CMSConcurrentMarkPhase implements Phase {
+public class CMSConcurrentMarkPhase implements Phase<Optional<GCPhase>> {
 
     public static final String CONCURRENT_MARK_PHASE = ".*" +
             CMS_CONCURRENT_MARK +
@@ -25,26 +24,22 @@ public class CMSConcurrentMarkPhase implements Phase {
     public static final Pattern CONCURRENT_MARK_PATTERN = Pattern.compile(CONCURRENT_MARK_PHASE);
 
     @Override
-    public void action(String message, GCData data) {
+    public Optional<GCPhase> action(String message) {
         if(!message.contains(CMS_CONCURRENT_MARK)){
-            return;
+            return Optional.empty();
         }
         Matcher matcher = CONCURRENT_MARK_PATTERN.matcher(message);
         if (!matcher.find()) {
-            return;
+            return Optional.empty();
         }
+
+        GCPhase phase = new GCPhase(CMSPhase.CMS_CONCURRENT_MARK);
+        //
         String concurrentMarkDuration;
         if (StringUtils.isNotEmpty(concurrentMarkDuration = matcher.group(CMS_CONCURRENT_MARK_DURATION))) {
-            data.addProperties(CMS_CONCURRENT_MARK_DURATION, concurrentMarkDuration);
+            phase.addProperties(CMS_CONCURRENT_MARK_DURATION, concurrentMarkDuration);
         }
         //
-        data.setType(GCType.CMS);
-        data.setPhase(name());
+        return Optional.of(phase);
     }
-
-    @Override
-    public GCPhase name() {
-        return GCPhase.CMS_CONCURRENT_MARK;
-    }
-
 }

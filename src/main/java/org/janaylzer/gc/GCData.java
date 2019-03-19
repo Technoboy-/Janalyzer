@@ -1,7 +1,8 @@
 package org.janaylzer.gc;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -12,9 +13,17 @@ public class GCData implements Serializable {
 
     private GCType type;
 
-    private GCPhase phase;
+    private List<GCPhase> phases = new LinkedList<>();
 
     private Map<String, String> properties = new TreeMap<>();
+
+    public GCData() {
+        //NOP
+    }
+
+    public GCData(GCType type) {
+        this.type = type;
+    }
 
     public GCType getType() {
         return type;
@@ -36,19 +45,23 @@ public class GCData implements Serializable {
         this.properties.put(key, value);
     }
 
-    public GCPhase getPhase() {
-        return phase;
+    public List<GCPhase> getPhases() {
+        return phases;
     }
 
-    public void setPhase(GCPhase phase) {
-        this.phase = phase;
+    public void setPhases(List<GCPhase> phases) {
+        this.phases = phases;
+    }
+
+    public void addPhases(GCPhase phase) {
+        this.phases.add(phase);
     }
 
     @Override
     public String toString() {
         return "GCData{" +
                 "type=" + type +
-                ", phase=" + phase +
+                ", phases=" + phases +
                 ", properties=" + properties +
                 '}';
     }

@@ -3,6 +3,7 @@ package org.janaylzer.gc.parnew;
 import org.janaylzer.gc.GCAction;
 import org.janaylzer.gc.GCData;
 import org.janaylzer.gc.GCType;
+import org.janaylzer.util.Optional;
 import org.janaylzer.util.StringUtils;
 
 import java.util.regex.Matcher;
@@ -13,7 +14,7 @@ import static org.janaylzer.util.Constants.*;
 /**
  * @Author: Tboy
  */
-public class ParNewGCAction implements GCAction {
+public class ParNewGCAction implements GCAction<Optional<GCData>> {
 
     public static final String PARNEW_ACTION = ".*" +
             "((\\[GC\\s\\((?<" +
@@ -40,14 +41,18 @@ public class ParNewGCAction implements GCAction {
 
     private static final Pattern PARNEW_PATTERN = Pattern.compile(PARNEW_ACTION);
 
-    public void action(String message, GCData data){
+    @Override
+    public Optional<GCData> action(String message){
         if(!message.contains(PARNEW)){
-            return;
+            return Optional.empty();
         }
         Matcher matcher = PARNEW_PATTERN.matcher(message);
         if(!matcher.find()){
-            return;
+            return Optional.empty();
         }
+
+        GCData data = new GCData(GCType.PARNEW);
+
         String caution;
         if(StringUtils.isNotEmpty(caution = matcher.group(PARNEW_CAUTION))){
             data.addProperties(PARNEW_CAUTION, caution);
@@ -85,6 +90,6 @@ public class ParNewGCAction implements GCAction {
             data.addProperties(PARNEW_DURATION, duration);
         }
         //
-        data.setType(GCType.PARNEW);
+        return Optional.of(data);
     }
 }

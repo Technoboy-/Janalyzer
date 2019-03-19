@@ -52,10 +52,8 @@ public class ParallelOldTest {
         String message = "2019-03-19T12:08:20.394-0800: [Full GC (Allocation Failure) [PSYoungGen: 0K->0K(13312K)] [ParOldGen: 616743K->616682K(707072K)] 616743K->616682K(720384K), [Metaspace: 4586K->4586K(1056768K)], 9.3209775 secs] [Times: user=14.04 sys=0.03, real=8.32 secs]";
         String message1 = "2019-03-19T12:08:20.394-0800: [Full GC (Allocation Failure) [PSYoungGen: 0K->0K(13312K)] [ParOldGen: 616743K->616682K(707072K)] 616743K->616682K(720384K), 8.3209775 secs] [Times: user=14.04 sys=0.03, real=8.32 secs]";
 
-        GCData data = new GCData();
         ParallelOldAction phase = new ParallelOldAction();
-        phase.action(message, data);
-        System.out.println(data);
+        System.out.println(phase.action(message));
     }
 
 

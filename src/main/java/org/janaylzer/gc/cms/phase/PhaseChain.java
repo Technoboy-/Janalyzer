@@ -1,6 +1,7 @@
 package org.janaylzer.gc.cms.phase;
 
-import org.janaylzer.gc.GCData;
+
+import org.janaylzer.gc.GCPhase;
 
 import java.util.List;
 
@@ -9,7 +10,5 @@ import java.util.List;
  */
 public interface PhaseChain{
 
-    List<Phase> getPhases();
-
-    void doAction(String message, GCData data);
+    List<GCPhase> doPhase(String message);
 }
