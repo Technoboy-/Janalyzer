@@ -18,33 +18,28 @@ public class Constants {
     public static final String PARNEW_CLEANUP_DURATION = "ParNewCleanupDuration";
 
     public static final String PARNEW_DURATION = "ParNewDuration";
-    //init-mark
+    //CMS init-mark
     public static final String CMS_INITIAL_MARK = "CMS-initial-mark";
 
     public static final String CMS_INITIAL_MARK_DURATION = "CMSInitialMarkDuration";
 
-    public static final String CMS_OLD_USAGE_BEFORE = "CMSOldUsageBefore";
 
-    public static final String CMS_OLD_USAGE_AFTER = "CMSOldUsageAfter";
-
-    public static final String CMS_OLD_SIZE = "CMSOldSize";
-
-    //concurrent mark
+    //CMS concurrent mark
     public static final String CMS_CONCURRENT_MARK = "CMS-concurrent-mark";
 
     public static final String CMS_CONCURRENT_MARK_DURATION = "CMSConcurrentMarkDuration";
 
-    //concurrent preclean
+    //CMS concurrent preclean
     public static final String CMS_CONCURRENT_PRECLEAN = "CMS-concurrent-preclean";
 
     public static final String CMS_CONCURRENT_PRECLEAN_DURATION = "CMSConcurrentPrecleanDuration";
 
-    //concurrent abortable preclean
+    //CMS concurrent abortable preclean
     public static final String CMS_CONCURRENT_ABORTABLE_PRECLEAN = "CMS-concurrent-abortable-preclean";
 
     public static final String CMS_CONCURRENT_ABORTABLE_PRECLEAN_DURATION = "CMSConcurrentAbortablePrecleanDuration";
 
-    //final remark
+    //CMS final remark
     public static final String CMS_FINAL_REMARK = "CMS Final Remark";
 
     public static final String CMS_WEAK_REFS_PROCESSING_DURATION = "CMSWeakRefsProcessingDuration";
@@ -53,15 +48,30 @@ public class Constants {
 
     public static final String CMS_FINAL_REMARK_DURATION = "CMSFinalRemarkDuration";
 
-    //concurrent sweep
+    //CMS concurrent sweep
     public static final String CMS_CONCURRENT_SWEEP = "CMS-concurrent-sweep";
 
     public static final String CMS_CONCURRENT_SWEEP_DURATION = "CMSConcurrentSweepDuration";
 
-    //concurrent reset
+    //CMS concurrent reset
     public static final String CMS_CONCURRENT_RESET = "CMS-concurrent-reset";
 
     public static final String CMS_CONCURRENT_RESET_DURATION = "CMSConcurrentResetDuration";
+
+    //parallel scavenge
+    public static final String PARALLEL_SCAVENGE = "PSYoungGen";
+
+    public static final String PARALLEL_SCAVENGE_CAUTION = "ParallelScavengeCaution";
+
+    public static final String PARALLEL_SCAVENGE_DURATION = "ParallelScavengeDuration";
+
+    //parallel old
+    public static final String PARALLEL_OLD = "ParOldGen";
+
+    public static final String PARALLEL_OLD_CAUTION = "ParallelOldCaution";
+
+    public static final String PARALLEL_OLD_DURATION = "ParallelOldDuration";
+
 
     //heap
     public static final String HEAP_USAGE_BEFORE = "HeapUsageBefore";
@@ -74,4 +84,17 @@ public class Constants {
     public static final String YOUNG_USAGE = "YoungUsage";
 
     public static final String YOUNG_SIZE = "YoungSize";
+
+    public static final String YOUNG_USAGE_BEFORE = "YoungUsageBefore";
+
+    public static final String YOUNG_USAGE_AFTER = "YoungUsageAfter";
+
+    //old
+    public static final String OLD_USAGE_BEFORE = "OldUsageBefore";
+
+    public static final String OLD_USAGE_AFTER = "OldUsageAfter";
+
+    public static final String OLD_SIZE = "OldSize";
+
+
 }

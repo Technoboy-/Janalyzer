@@ -28,9 +28,9 @@ public class CMSFinalRemarkPhase implements Phase {
             ">\\d+\\.\\d+).*weak refs processing((,\\s)|(.*?\\],\\s))(?<" +
             CMS_WEAK_REFS_PROCESSING_DURATION +
             ">\\d+\\.\\d+).*CMS-remark:\\s(?<" +
-            CMS_OLD_USAGE_AFTER +
+            OLD_USAGE_AFTER +
             ">\\d+\\w)\\((?<" +
-            CMS_OLD_SIZE +
+            OLD_SIZE +
             ">\\d+\\w)\\)\\]\\s(?<" +
             HEAP_USAGE_AFTER +
             ">\\d+\\w)\\((?<" +
@@ -67,12 +67,12 @@ public class CMSFinalRemarkPhase implements Phase {
             data.addProperties(CMS_WEAK_REFS_PROCESSING_DURATION, weakRefsProcessingDuration);
         }
         String oldUsageAfter;
-        if(StringUtils.isNotEmpty(oldUsageAfter = matcher.group(CMS_OLD_USAGE_AFTER))){
-            data.addProperties(CMS_OLD_USAGE_AFTER, oldUsageAfter);
+        if(StringUtils.isNotEmpty(oldUsageAfter = matcher.group(OLD_USAGE_AFTER))){
+            data.addProperties(OLD_USAGE_AFTER, oldUsageAfter);
         }
         String oldSize;
-        if(StringUtils.isNotEmpty(oldSize = matcher.group(CMS_OLD_SIZE))){
-            data.addProperties(CMS_OLD_SIZE, oldSize);
+        if(StringUtils.isNotEmpty(oldSize = matcher.group(OLD_SIZE))){
+            data.addProperties(OLD_SIZE, oldSize);
         }
         String heapUsageAfter;
         if(StringUtils.isNotEmpty(heapUsageAfter = matcher.group(HEAP_USAGE_AFTER))){

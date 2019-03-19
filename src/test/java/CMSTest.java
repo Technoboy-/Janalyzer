@@ -3,10 +3,49 @@ import org.janaylzer.gc.cms.*;
 import org.janaylzer.gc.cms.phase.*;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * @Author: Tboy
  */
 public class CMSTest {
+
+    /**
+     *  通过以下参数可以产生log
+     *  -XX:+PrintGCDetails -XX:+UseConcMarkSweepGC -Xms5m -XX:+PrintGCDateStamps
+     */
+    @Test
+    public void generateGCLog(){
+        CountDownLatch latch = new CountDownLatch(1);
+        AtomicLong counter = new AtomicLong(0);
+        Random random = new Random();
+        Thread worker = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<String> list = new ArrayList<>();
+                while(true){
+                    list.add("i love coding");
+                    if(counter.incrementAndGet() % 1000000 == 0){
+                        list = list.subList(random.nextInt(100), list.size());
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            //
+                        }
+                    }
+                }
+            }
+        });
+        worker.start();
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+        }
+    }
 
     @Test
     public void testInitialMark() {
@@ -16,7 +55,7 @@ public class CMSTest {
                 "sys=0.00, real=0.08 secs] ";
         GCData data = new GCData();
         CMSInitialMarkPhase phase = new CMSInitialMarkPhase();
-        phase.doPhase(message, data);
+        phase.action(message, data);
         System.out.println(data);
     }
 
@@ -25,7 +64,7 @@ public class CMSTest {
         String message = "2019-03-18T15:03:39.501-0800: [CMS-concurrent-mark: 0.041/0.040 secs] [Times: user=0.11 sys=0.01, real=0.04 secs]";
         CMSConcurrentMarkPhase phase = new CMSConcurrentMarkPhase();
         GCData data = new GCData();
-        phase.doPhase(message, data);
+        phase.action(message, data);
         System.out.println(data);
     }
 
@@ -34,7 +73,7 @@ public class CMSTest {
         String message = "2019-03-18T15:03:39.922-0800: [CMS-concurrent-preclean: 0.059/0.080 secs] [Times: user=0.13 sys=0.00, real=0.07 secs]";
         CMSConcurrentPrecleanPhase phase = new CMSConcurrentPrecleanPhase();
         GCData data = new GCData();
-        phase.doPhase(message, data);
+        phase.action(message, data);
         System.out.println(data);
     }
 
@@ -44,7 +83,7 @@ public class CMSTest {
         String message = "2019-03-18T15:03:39.501-0800: [CMS-concurrent-abortable-preclean: 0.167/1.074 secs] [Times: user=0.20 sys=0.00, real=1.07 secs]";
         CMSConcurrentAbortablePrecleanPhase phase = new CMSConcurrentAbortablePrecleanPhase();
         GCData data = new GCData();
-        phase.doPhase(message, data);
+        phase.action(message, data);
         System.out.println(data);
     }
 
@@ -53,7 +92,7 @@ public class CMSTest {
         String message = "2019-03-18T15:03:40.411-0800: [GC (CMS Final Remark) [YG occupancy: 0 K (68608 K)]2019-03-18T15:03:40.411-0800: [Rescan (parallel) , 0.0002597 secs]2019-03-18T15:03:40.411-0800: [weak refs processing, 0.0000120 secs]2019-03-18T15:03:40.411-0800: [class unloading, 0.0005750 secs]2019-03-18T15:03:40.412-0800: [scrub symbol table, 0.0004445 secs]2019-03-18T15:03:40.412-0800: [scrub string table, 0.0001678 secs][1 CMS-remark: 136519K(152420K)] 136520K(221028K), 0.0015073 secs] [Times: user=0.01 sys=0.00, real=0.00 secs] ";
         CMSFinalRemarkPhase phase = new CMSFinalRemarkPhase();
         GCData data = new GCData();
-        phase.doPhase(message, data);
+        phase.action(message, data);
         System.out.println(data);
     }
 
@@ -62,7 +101,7 @@ public class CMSTest {
         String message = "2019-03-18T15:03:39.548-0800: [CMS-concurrent-sweep: 0.002/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]";
         CMSConcurrentSweepPhase phase = new CMSConcurrentSweepPhase();
         GCData data = new GCData();
-        phase.doPhase(message, data);
+        phase.action(message, data);
         System.out.println(data);
     }
 
@@ -71,7 +110,7 @@ public class CMSTest {
         String message = "2019-03-18T15:03:39.549-0800: [CMS-concurrent-reset: 0.001/0.001 secs] [Times: user=0.01 sys=0.00, real=0.00 secs] ";
         CMSConcurrentResetPhase phase = new CMSConcurrentResetPhase();
         GCData data = new GCData();
-        phase.doPhase(message, data);
+        phase.action(message, data);
         System.out.println(data);
     }
 
@@ -92,7 +131,7 @@ public class CMSTest {
                 "2018-04-12T13:48:38.462+0800: 15590.377: [CMS-concurrent-reset: 0.044/0.044 secs] [Times: user=0.15 sys=0.10, real=0.04 secs]";
         CMSGCAction action = new CMSGCAction();
         GCData data = new GCData();
-        action.act(message, data);
+        action.action(message, data);
         System.out.println(data);
     }
 }

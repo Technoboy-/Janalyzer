@@ -28,13 +28,13 @@ public class ParNewGCAction implements GCAction {
             PARNEW_YOUNG_SIZE +
             ">\\d+\\w)\\),\\s(?<" +
             PARNEW_CLEANUP_DURATION +
-            ">\\d+\\.\\d+)\\ssecs\\]\\s(?<" +
+            ">\\d+\\.\\d+)\\ssecs\\]((\\s)|(.*\\[CMS.*\\ssecs\\]\\s))(?<" +
             HEAP_USAGE_BEFORE +
             ">\\d+\\w)->(?<" +
             HEAP_USAGE_AFTER +
             ">\\d+\\w)\\((?<" +
             HEAP_SIZE +
-            ">\\d+\\w)\\),\\s(?<" +
+            ">\\d+\\w)\\),((\\s)|(\\s\\[Metaspace.*\\],\\s))(?<" +
             PARNEW_DURATION +
             ">\\d+\\.\\d+)\\ssecs\\]";
 

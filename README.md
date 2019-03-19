@@ -1,1 +1,4 @@
-# Janalyzer
+#### 一. 介绍
+Janalyzer致力于解析jvm的GC日志，输出易读的方式,外加少量统计功能。目前case仅覆盖JDK8。
+
+#### 二. 使用

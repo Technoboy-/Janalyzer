@@ -18,9 +18,9 @@ public class CMSInitialMarkPhase implements Phase {
     public static final String INITIAL_MARK_PHASE = ".*" +
             CMS_INITIAL_MARK +
             ":\\s(?<" +
-            CMS_OLD_USAGE_BEFORE +
+            OLD_USAGE_BEFORE +
             ">\\d+\\w)\\((?<" +
-            CMS_OLD_SIZE +
+            OLD_SIZE +
             ">\\d+\\w)\\)\\]\\s(?<" +
             HEAP_USAGE_BEFORE +
             ">\\d+\\w)\\((?<" +
@@ -42,13 +42,13 @@ public class CMSInitialMarkPhase implements Phase {
         }
 
         String cmsOldUsageBefore;
-        if (StringUtils.isNotEmpty(cmsOldUsageBefore = matcher.group(CMS_OLD_USAGE_BEFORE))) {
-            data.addProperties(CMS_OLD_USAGE_BEFORE, cmsOldUsageBefore);
+        if (StringUtils.isNotEmpty(cmsOldUsageBefore = matcher.group(OLD_USAGE_BEFORE))) {
+            data.addProperties(OLD_USAGE_BEFORE, cmsOldUsageBefore);
         }
 
         String cmsOldSize;
-        if (StringUtils.isNotEmpty(cmsOldSize = matcher.group(CMS_OLD_SIZE))) {
-            data.addProperties(CMS_OLD_SIZE, cmsOldSize);
+        if (StringUtils.isNotEmpty(cmsOldSize = matcher.group(OLD_SIZE))) {
+            data.addProperties(OLD_SIZE, cmsOldSize);
         }
 
         String heapUsageBefore;
