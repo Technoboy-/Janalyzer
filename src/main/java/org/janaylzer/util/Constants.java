@@ -9,12 +9,6 @@ public class Constants {
 
     public static final String PARNEW = "ParNew";
 
-    public static final String PARNEW_YOUNG_USAGE_BEFORE = "ParNewYoungUsageBefore";
-
-    public static final String PARNEW_YOUNG_USAGE_AFTER = "ParNewYoungUsageAfter";
-
-    public static final String PARNEW_YOUNG_SIZE = "ParNewYoungSize";
-
     public static final String PARNEW_CLEANUP_DURATION = "ParNewCleanupDuration";
 
     public static final String PARNEW_DURATION = "ParNewDuration";

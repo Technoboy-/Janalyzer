@@ -22,11 +22,11 @@ public class ParNewGCAction implements GCAction<Optional<GCData>> {
             ">[\\w ]+)\\).*?\\[)|(\\[GC.*?\\[))"+
             PARNEW +
             "((:\\s)|(.*\\]:\\s))(?<" +
-            PARNEW_YOUNG_USAGE_BEFORE +
+            YOUNG_USAGE_BEFORE +
             ">\\d+\\w)->(?<" +
-            PARNEW_YOUNG_USAGE_AFTER +
+            YOUNG_USAGE_AFTER +
             ">\\d+\\w)\\((?<" +
-            PARNEW_YOUNG_SIZE +
+            YOUNG_SIZE +
             ">\\d+\\w)\\),\\s(?<" +
             PARNEW_CLEANUP_DURATION +
             ">\\d+\\.\\d+)\\ssecs\\]((\\s)|(.*\\[CMS.*\\ssecs\\]\\s))(?<" +
@@ -58,16 +58,16 @@ public class ParNewGCAction implements GCAction<Optional<GCData>> {
             data.addProperties(PARNEW_CAUTION, caution);
         }
         String youngUsageBefore;
-        if(StringUtils.isNotEmpty(youngUsageBefore = matcher.group(PARNEW_YOUNG_USAGE_BEFORE))){
-            data.addProperties(PARNEW_YOUNG_USAGE_BEFORE, youngUsageBefore);
+        if(StringUtils.isNotEmpty(youngUsageBefore = matcher.group(YOUNG_USAGE_BEFORE))){
+            data.addProperties(YOUNG_USAGE_BEFORE, youngUsageBefore);
         }
         String youngUsageAfter;
-        if(StringUtils.isNotEmpty(youngUsageAfter = matcher.group(PARNEW_YOUNG_USAGE_AFTER))){
-            data.addProperties(PARNEW_YOUNG_USAGE_AFTER, youngUsageAfter);
+        if(StringUtils.isNotEmpty(youngUsageAfter = matcher.group(YOUNG_USAGE_AFTER))){
+            data.addProperties(YOUNG_USAGE_AFTER, youngUsageAfter);
         }
         String youngSize;
-        if(StringUtils.isNotEmpty(youngSize = matcher.group(PARNEW_YOUNG_SIZE))){
-            data.addProperties(PARNEW_YOUNG_SIZE, youngSize);
+        if(StringUtils.isNotEmpty(youngSize = matcher.group(YOUNG_SIZE))){
+            data.addProperties(YOUNG_SIZE, youngSize);
         }
         String cleanupDuration;
         if(StringUtils.isNotEmpty(cleanupDuration = matcher.group(PARNEW_CLEANUP_DURATION))){

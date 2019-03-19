@@ -111,19 +111,16 @@ public class CMSTest {
 
     @Test
     public void testCMSGCAction() {
-        String message = "2018-04-12T13:48:26.233+0800: 15578.148: [GC [1 CMS-initial-mark: 6294851K(20971520K)] 6354687K(24746432K), 0.0466580 secs] [Times: user=0.04 sys=0.00, real=0.04 secs]" +
-                "2018-04-12T13:48:26.280+0800: 15578.195: [CMS-concurrent-mark-start]" +
-                "2018-04-12T13:48:26.418+0800: 15578.333: [CMS-concurrent-mark: 0.138/0.138 secs] [Times: user=1.01 sys=0.21, real=0.14 secs]" +
-                "2018-04-12T13:48:26.418+0800: 15578.334: [CMS-concurrent-preclean-start]" +
-                "2018-04-12T13:48:26.476+0800: 15578.391: [CMS-concurrent-preclean: 0.056/0.057 secs] [Times: user=0.20 sys=0.12, real=0.06 secs]" +
-                "2018-04-12T13:48:26.476+0800: 15578.391: [CMS-concurrent-abortable-preclean-start]" +
-                "2018-04-12T13:48:29.989+0800: 15581.905: [CMS-concurrent-abortable-preclean: 3.506/3.514 secs] [Times: user=11.93 sys=6.77, real=3.51 secs]" +
-                "2018-04-12T13:48:29.991+0800: 15581.906: [GC[YG occupancy: 1805641 K (3774912 K)]2018-04-12T13:48:29.991+0800: 15581.906: [GC2018-04-12T13:48:29.991+0800: 15581.906: [ParNew: 1805641K->48395K(3774912K), 0.0826620 secs] 8100493K->6348225K(24746432K), 0.0829480 secs] [Times: user=0.81 sys=0.00, real=0.09 secs]2018-04-12T13:48:30.074+0800: 15581.989: [Rescan (parallel) , 0.0429390 secs]2018-04-12T13:48:30.117+0800: 15582.032: [weak refs processing, 0.0027800 secs]2018-04-12T13:48:30.119+0800: 15582.035: [class unloading, 0.0033120 secs]2018-04-12T13:48:30.123+0800: 15582.038: [scrub symbol table, 0.0016780 secs]2018-04-12T13:48:30.124+0800: 15582.040: [scrub string table, 0.0004780 secs] [1 CMS-remark: 6299829K(20971520K)] 6348225K(24746432K), 0.1365130 secs] [Times: user=1.24 sys=0.00, real=0.14 secs]" +
-                "2018-04-12T13:48:30.128+0800: 15582.043: [CMS-concurrent-sweep-start]" +
-                "2018-04-12T13:48:36.638+0800: 15588.553: [GC2018-04-12T13:48:36.638+0800: 15588.554: [ParNew: 3403915K->52142K(3774912K), 0.0874610 secs] 4836483K->1489601K(24746432K), 0.0877490 secs] [Times: user=0.84 sys=0.00, real=0.09 secs]" +
-                "2018-04-12T13:48:38.412+0800: 15590.327: [CMS-concurrent-sweep: 8.193/8.284 secs] [Times: user=30.34 sys=16.44, real=8.28 secs]" +
-                "2018-04-12T13:48:38.419+0800: 15590.334: [CMS-concurrent-reset-start]" +
-                "2018-04-12T13:48:38.462+0800: 15590.377: [CMS-concurrent-reset: 0.044/0.044 secs] [Times: user=0.15 sys=0.10, real=0.04 secs]";
+        String message = "2019-03-18T15:03:39.204-0800: [GC (CMS Initial Mark) [1 CMS-initial-mark: 28020K(42092K)] 28020K(53868K), 0.0007546 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]" +
+                "2019-03-18T15:03:39.205-0800: [CMS-concurrent-mark-start]" +
+                "2019-03-18T15:03:39.224-0800: [CMS-concurrent-mark: 0.019/0.019 secs] [Times: user=0.05 sys=0.00, real=0.02 secs]" +
+                "2019-03-18T15:03:39.224-0800: [CMS-concurrent-preclean-start]" +
+                "2019-03-18T15:03:39.244-0800: [CMS-concurrent-preclean: 0.020/0.020 secs] [Times: user=0.04 sys=0.00, real=0.02 secs]" +
+                "2019-03-18T15:03:39.245-0800: [GC (CMS Final Remark) [YG occupancy: 0 K (11776 K)]2019-03-18T15:03:39.245-0800: [Rescan (parallel) , 0.0007508 secs]2019-03-18T15:03:39.245-0800: [weak refs processing, 0.0000221 secs]2019-03-18T15:03:39.245-0800: [class unloading, 0.0011218 secs]2019-03-18T15:03:39.247-0800: [scrub symbol table, 0.0007869 secs]2019-03-18T15:03:39.247-0800: [scrub string table, 0.0002856 secs][1 CMS-remark: 28020K(42092K)] 28020K(53868K), 0.0030433 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]" +
+                "2019-03-18T15:03:39.248-0800: [CMS-concurrent-sweep-start]" +
+                "2019-03-18T15:03:39.248-0800: [CMS-concurrent-sweep: 0.001/0.001 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]" +
+                "2019-03-18T15:03:39.248-0800: [CMS-concurrent-reset-start]" +
+                "2019-03-18T15:03:39.249-0800: [CMS-concurrent-reset: 0.001/0.001 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]";
         CMSGCAction action = new CMSGCAction();
         System.out.println(action.action(message));
     }

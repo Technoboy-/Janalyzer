@@ -1,5 +1,3 @@
-import org.janaylzer.gc.GCData;
-import org.janaylzer.gc.parnew.ParNewGCAction;
 import org.janaylzer.gc.serial.SerialAction;
 import org.janaylzer.gc.serial.SerialOldAction;
 import org.junit.Test;

@@ -1,6 +1,4 @@
-import org.janaylzer.gc.GCData;
 import org.janaylzer.gc.parallel.old.ParallelOldAction;
-import org.janaylzer.gc.parnew.ParNewGCAction;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -51,7 +49,6 @@ public class ParallelOldTest {
     public void testParallelOld() {
         String message = "2019-03-19T12:08:20.394-0800: [Full GC (Allocation Failure) [PSYoungGen: 0K->0K(13312K)] [ParOldGen: 616743K->616682K(707072K)] 616743K->616682K(720384K), [Metaspace: 4586K->4586K(1056768K)], 9.3209775 secs] [Times: user=14.04 sys=0.03, real=8.32 secs]";
         String message1 = "2019-03-19T12:08:20.394-0800: [Full GC (Allocation Failure) [PSYoungGen: 0K->0K(13312K)] [ParOldGen: 616743K->616682K(707072K)] 616743K->616682K(720384K), 8.3209775 secs] [Times: user=14.04 sys=0.03, real=8.32 secs]";
-
         ParallelOldAction phase = new ParallelOldAction();
         System.out.println(phase.action(message));
     }
