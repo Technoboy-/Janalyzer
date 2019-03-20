@@ -35,6 +35,7 @@ class JanalyzerImpl implements Janalyzer{
 
         Collector<GCType, GCType> collector = builder.getCollector();
 
+        Preconditions.checkArgument(collector.getOld() == null, "Collector old should not be empty" );
         Preconditions.checkArgument(GCType.SERIAL == collector.getYoung() && GCType.PARALLEL_OLD == collector.getOld(), "Collector SERIAL and PARALLEL_OLD can not compose pair" );
         Preconditions.checkArgument(GCType.PARNEW == collector.getYoung() && GCType.PARALLEL_OLD == collector.getOld(), "Collector PARNEW and PARALLEL_OLD can not compose pair" );
         Preconditions.checkArgument(GCType.PARALLEL_SCAVENGE == collector.getYoung() && GCType.CMS == collector.getOld(), "Collector PARALLEL_SCAVENGE and CMS can not compose pair" );
