@@ -63,3 +63,7 @@ Janalyzer致力于解析jvm的GC日志，输出易读的方式,外加少量统�
    |SurvivorBefore|survivor区回收前大小|
    |SurvivorAfter|survivor区回收后大小|
    
+
+#### 四. 关于更多JDK版本的支持
+   由于当前版本仅支持1.8.0_191，遇到其他版本无法解析，请fork项目，然后把相应日志格式放到log目录下，请以jdk版本号命令文件夹，然后merge request。
+   或直接通过邮件联系technoboy@yeah.net。
