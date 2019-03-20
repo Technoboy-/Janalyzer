@@ -1,5 +1,5 @@
-import org.janaylzer.gc.serial.SerialAction;
-import org.janaylzer.gc.serial.SerialOldAction;
+import org.janalyzer.gc.serial.SerialGCAction;
+import org.janalyzer.gc.serial.SerialOldGCAction;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class SerialTest {
     public void testSerial() {
         String message = "[GC (Allocation Failure) 2019-03-19T15:28:10.319-0800: [DefNew: 937K->0K(1920K), 0.0014898 secs] 2631K->2631K(6016K), 0.0015103 secs] [Times: user=0.01 sys=0.00, real=0.01 secs]";
 
-        SerialAction phase = new SerialAction();
+        SerialGCAction phase = new SerialGCAction();
 
         System.out.println(phase.action(message));
     }
@@ -59,7 +59,7 @@ public class SerialTest {
     public void testSerialOld() {
         String message = "2019-03-19T15:29:06.077-0800: [Full GC (Allocation Failure) 2019-03-19T15:29:06.077-0800: [Tenured: 616743K->616682K(1398144K), 0.7188938 secs] 616743K->616682K(2000064K), [Metaspace: 4582K->4582K(1056768K)], 0.7190180 secs] [Times: user=0.72 sys=0.00, real=0.72 secs]";
 
-        SerialOldAction phase = new SerialOldAction();
+        SerialOldGCAction phase = new SerialOldGCAction();
 
         System.out.println(phase.action(message));
     }

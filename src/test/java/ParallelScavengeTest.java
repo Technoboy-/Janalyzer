@@ -1,4 +1,4 @@
-import org.janaylzer.gc.parallel.scavenge.ParallelScavengeAction;
+import org.janalyzer.gc.parallel.scavenge.ParallelScavengeGCAction;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class ParallelScavengeTest {
     @Test
     public void testParallelScavenge() {
         String message = "2019-03-19T11:40:47.801-0800: [GC (Allocation Failure) [PSYoungGen: 4497K->448K(4608K)] 1233088K->1229039K(1402880K), 0.8331384 secs] [Times: user=4.98 sys=0.40, real=0.83 secs]";
-        ParallelScavengeAction phase = new ParallelScavengeAction();
+        ParallelScavengeGCAction phase = new ParallelScavengeGCAction();
         System.out.println(phase.action(message));
     }
 

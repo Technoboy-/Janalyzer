@@ -1,5 +1,5 @@
-import org.janaylzer.gc.cms.CMSGCAction;
-import org.janaylzer.gc.cms.phase.*;
+import org.janalyzer.gc.cms.CMSGCAction;
+import org.janalyzer.gc.cms.phase.*;
 import org.junit.Test;
 
 import java.util.ArrayList;

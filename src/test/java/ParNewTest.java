@@ -1,4 +1,4 @@
-import org.janaylzer.gc.parnew.ParNewGCAction;
+import org.janalyzer.gc.parnew.ParNewGCAction;
 import org.junit.Test;
 
 import java.util.ArrayList;
