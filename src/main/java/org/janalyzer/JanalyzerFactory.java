@@ -24,18 +24,12 @@ public class JanalyzerFactory {
             return new JanalyzerImpl(this);
         }
 
-        public Builder withDefault(){
-            this.jdk = JDK.JDK8;
-            this.collector = new Collector<>(GCType.G1, GCType.G1);
-            return this;
-        }
-
         public Builder withJDK(JDK jdk){
             this.jdk = jdk;
             return this;
         }
 
-        public Builder plugin(Collector<GCType, GCType> collector){
+        public Builder withCollecor(Collector<GCType, GCType> collector){
             this.collector = collector;
             return this;
         }
@@ -49,5 +43,4 @@ public class JanalyzerFactory {
         }
 
     }
-
 }

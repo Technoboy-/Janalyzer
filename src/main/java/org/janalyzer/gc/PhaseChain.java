@@ -1,8 +1,6 @@
 package org.janalyzer.gc;
 
 
-import org.janalyzer.gc.GCPhase;
-
 import java.util.List;
 
 /**

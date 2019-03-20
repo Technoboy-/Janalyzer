@@ -1,9 +1,11 @@
 package org.janalyzer.gc.g1;
 
 import org.janalyzer.gc.*;
+import org.janalyzer.util.CollectionUtils;
 import org.janalyzer.util.Optional;
 import org.janalyzer.util.StringUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,9 +29,12 @@ public class G1GCAction implements GCAction<Optional<GCData>> {
             return fullAction;
         } else{
             List<GCPhase> gcPhases = phaseChain.doPhase(message);
-            GCData data = new GCData(GCType.CMS);
-            data.setPhases(gcPhases);
-            return Optional.of(data);
+            if(CollectionUtils.isNotEmpty(gcPhases)){
+                GCData data = new GCData(GCType.G1);
+                data.setPhases(gcPhases);
+                return Optional.of(data);
+            }
+            return Optional.empty();
         }
     }
 

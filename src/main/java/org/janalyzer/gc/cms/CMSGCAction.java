@@ -5,6 +5,7 @@ import org.janalyzer.gc.GCData;
 import org.janalyzer.gc.GCPhase;
 import org.janalyzer.gc.GCType;
 import org.janalyzer.gc.PhaseChain;
+import org.janalyzer.util.CollectionUtils;
 import org.janalyzer.util.Optional;
 import org.janalyzer.util.StringUtils;
 
@@ -34,9 +35,12 @@ public class CMSGCAction implements GCAction<Optional<GCData>> {
             return fullAction;
         } else{
             List<GCPhase> gcPhases = phaseChain.doPhase(message);
-            GCData data = new GCData(GCType.CMS);
-            data.setPhases(gcPhases);
-            return Optional.of(data);
+            if(CollectionUtils.isNotEmpty(gcPhases)){
+                GCData data = new GCData(GCType.CMS);
+                data.setPhases(gcPhases);
+                return Optional.of(data);
+            }
+            return Optional.empty();
         }
     }
 

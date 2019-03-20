@@ -11,10 +11,7 @@ import org.janalyzer.gc.parallel.scavenge.ParallelScavengeGCAction;
 import org.janalyzer.gc.parnew.ParNewGCAction;
 import org.janalyzer.gc.serial.SerialGCAction;
 import org.janalyzer.gc.serial.SerialOldGCAction;
-import org.janalyzer.util.Collector;
-import org.janalyzer.util.Optional;
-import org.janalyzer.util.Pair;
-import org.janalyzer.util.Preconditions;
+import org.janalyzer.util.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,30 +32,40 @@ class JanalyzerImpl implements Janalyzer{
 
         Collector<GCType, GCType> collector = builder.getCollector();
 
-        Preconditions.checkArgument(collector.getOld() == null, "Collector old should not be empty" );
-        Preconditions.checkArgument(GCType.SERIAL == collector.getYoung() && GCType.PARALLEL_OLD == collector.getOld(), "Collector SERIAL and PARALLEL_OLD can not compose pair" );
-        Preconditions.checkArgument(GCType.PARNEW == collector.getYoung() && GCType.PARALLEL_OLD == collector.getOld(), "Collector PARNEW and PARALLEL_OLD can not compose pair" );
-        Preconditions.checkArgument(GCType.PARALLEL_SCAVENGE == collector.getYoung() && GCType.CMS == collector.getOld(), "Collector PARALLEL_SCAVENGE and CMS can not compose pair" );
-        //
-        Pair<GCType, GCAction> oldAction = getGCAction(collector.getOld());
-        actionMap.putIfAbsent(oldAction.getLeft(), oldAction.getRight());
-
-        //
-        Pair<GCType, GCAction> youngAction = getGCAction(collector.getYoung());
-        actionMap.putIfAbsent(youngAction.getLeft(), youngAction.getRight());
-
-        if(GCType.CMS == collector.getOld()){
-            Pair<GCType, GCAction> parAction = getGCAction(GCType.PARNEW);
-            actionMap.putIfAbsent(parAction.getLeft(), parAction.getRight());
-            Pair<GCType, GCAction> serialOldAction = getGCAction(GCType.SERIAL_OLD);
-            actionMap.putIfAbsent(serialOldAction.getLeft(), serialOldAction.getRight());
-        }
-
-        //
-        if(actionMap.get(GCType.G1) != null){
-            actionList.add(actionMap.get(GCType.G1));
+        if(collector instanceof Collector.All){
+            for(GCType type : GCType.values()){
+                actionList.add(getGCAction(type).getRight());
+            }
         } else{
-            actionList.addAll(actionMap.values());
+            Preconditions.checkArgument(collector.getOld() == null, "Collector old should not be empty" );
+            Preconditions.checkArgument(GCType.SERIAL == collector.getYoung() && GCType.PARALLEL_OLD == collector.getOld(), "Collector SERIAL and PARALLEL_OLD can not compose pair" );
+            Preconditions.checkArgument(GCType.PARNEW == collector.getYoung() && GCType.PARALLEL_OLD == collector.getOld(), "Collector PARNEW and PARALLEL_OLD can not compose pair" );
+            Preconditions.checkArgument(GCType.PARALLEL_SCAVENGE == collector.getYoung() && GCType.CMS == collector.getOld(), "Collector PARALLEL_SCAVENGE and CMS can not compose pair" );
+            //
+            Pair<GCType, GCAction> oldAction = getGCAction(collector.getOld());
+            actionMap.putIfAbsent(oldAction.getLeft(), oldAction.getRight());
+
+            //
+            Pair<GCType, GCAction> youngAction = getGCAction(collector.getYoung());
+            actionMap.putIfAbsent(youngAction.getLeft(), youngAction.getRight());
+
+            if(GCType.CMS == collector.getOld()){
+                Pair<GCType, GCAction> parAction = getGCAction(GCType.PARNEW);
+                actionMap.putIfAbsent(parAction.getLeft(), parAction.getRight());
+                Pair<GCType, GCAction> serialOldAction = getGCAction(GCType.SERIAL_OLD);
+                actionMap.putIfAbsent(serialOldAction.getLeft(), serialOldAction.getRight());
+            }
+
+            //
+            if(builder.getJdk() != null && builder.getJdk().getCode() < JDK.JDK8.getCode()){
+                actionMap.remove(GCType.G1);
+            }
+            //
+            if(actionMap.get(GCType.G1) != null){
+                actionList.add(actionMap.get(GCType.G1));
+            } else{
+                actionList.addAll(actionMap.values());
+            }
         }
     }
 

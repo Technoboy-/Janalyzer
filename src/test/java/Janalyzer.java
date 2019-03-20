@@ -1,6 +1,6 @@
-import org.janalyzer.Janalyzer;
 import org.janalyzer.JanalyzerFactory;
 import org.janalyzer.gc.GCData;
+import org.janalyzer.gc.GCType;
 import org.janalyzer.util.Collector;
 import org.janalyzer.util.Optional;
 import org.junit.Test;
@@ -8,11 +8,9 @@ import org.junit.Test;
 /**
  * @Author: Tboy
  */
-public class JanalyzerTest {
+public class Janalyzer {
 
-    @Test
-    public void testJanalyzer(){
-
+    public static void main(String[] args) {
         String message = "2019-03-18T15:03:39.204-0800: [GC (CMS Initial Mark) [1 CMS-initial-mark: 28020K(42092K)] 28020K(53868K), 0.0007546 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]" +
                 "2019-03-18T15:03:39.205-0800: [CMS-concurrent-mark-start]" +
                 "2019-03-18T15:03:39.224-0800: [CMS-concurrent-mark: 0.019/0.019 secs] [Times: user=0.05 sys=0.00, real=0.02 secs]" +
@@ -23,9 +21,10 @@ public class JanalyzerTest {
                 "2019-03-18T15:03:39.248-0800: [CMS-concurrent-sweep: 0.001/0.001 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]" +
                 "2019-03-18T15:03:39.248-0800: [CMS-concurrent-reset-start]" +
                 "2019-03-18T15:03:39.249-0800: [CMS-concurrent-reset: 0.001/0.001 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]";
-
-        Janalyzer janalyzer = JanalyzerFactory.builder().withCollecor(new Collector.All()).build();
+        org.janalyzer.Janalyzer janalyzer = JanalyzerFactory.builder().withCollecor(new Collector.All()).build();
         Optional<GCData> analyze = janalyzer.analyze(message);
         System.out.println(analyze.get());
+
+        JanalyzerFactory.builder().withCollecor(new Collector<>(GCType.PARNEW, GCType.CMS)).build();
     }
 }
