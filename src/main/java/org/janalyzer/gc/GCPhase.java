@@ -10,6 +10,8 @@ import java.util.TreeMap;
  */
 public class GCPhase implements Serializable {
 
+    private String datetime;
+
     private String phase;
 
     private Map<String, String> properties = new TreeMap<>();
@@ -20,6 +22,14 @@ public class GCPhase implements Serializable {
 
     public GCPhase(String phase) {
         this.phase = phase;
+    }
+
+    public String getDatetime() {
+        return datetime;
+    }
+
+    public void setDatetime(String datetime) {
+        this.datetime = datetime;
     }
 
     public String getPhase() {

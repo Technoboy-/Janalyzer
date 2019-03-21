@@ -11,9 +11,13 @@ import java.util.TreeMap;
  */
 public class GCData implements Serializable {
 
+    private String datetime;
+
     private GCType type;
 
     private List<GCPhase> phases = new LinkedList<>();
+
+    private GCTime gcTime;
 
     private Map<String, String> properties = new TreeMap<>();
 
@@ -23,6 +27,22 @@ public class GCData implements Serializable {
 
     public GCData(GCType type) {
         this.type = type;
+    }
+
+    public String getDatetime() {
+        return datetime;
+    }
+
+    public void setDatetime(String datetime) {
+        this.datetime = datetime;
+    }
+
+    public GCTime getGcTime() {
+        return gcTime;
+    }
+
+    public void setGcTime(GCTime gcTime) {
+        this.gcTime = gcTime;
     }
 
     public GCType getType() {

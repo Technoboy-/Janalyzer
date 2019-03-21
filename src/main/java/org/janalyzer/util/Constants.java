@@ -4,6 +4,16 @@ package org.janalyzer.util;
  * @Author: Tboy
  */
 public class Constants {
+
+    //common
+    public static final String DATETIME = "datetime";
+
+    public static final String USER_TIME = "UserTime";
+
+    public static final String SYS_TIME = "SysTime";
+
+    public static final String REAL_TIME = "RealTime";
+
     //parnew
     public static final String PARNEW_CAUTION = "ParNewCaution";
 
