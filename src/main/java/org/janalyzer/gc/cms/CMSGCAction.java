@@ -1,10 +1,6 @@
 package org.janalyzer.gc.cms;
 
-import org.janalyzer.gc.GCAction;
-import org.janalyzer.gc.GCData;
-import org.janalyzer.gc.GCPhase;
-import org.janalyzer.gc.GCType;
-import org.janalyzer.gc.PhaseChain;
+import org.janalyzer.gc.*;
 import org.janalyzer.util.CollectionUtils;
 import org.janalyzer.util.Optional;
 import org.janalyzer.util.StringUtils;
@@ -44,7 +40,7 @@ public class CMSGCAction implements GCAction<Optional<GCData>> {
         }
     }
 
-    static class CMSFullGCAction implements GCAction<Optional<GCData>>{
+    static class CMSFullGCAction extends CommonGCAction {
 
         public static final String CMS_FULL_GC_ACTION =
                 ".*" + FULL_GC + "\\s\\((?<" +
@@ -79,6 +75,9 @@ public class CMSGCAction implements GCAction<Optional<GCData>> {
                 return Optional.empty();
             }
             GCData data = new GCData(GCType.CMS);
+
+            super.action(message, data);
+
             String caution;
             if (StringUtils.isNotEmpty(caution = matcher.group(CMS_FULL_GC_CAUTION))) {
                 data.addProperties(CMS_FULL_GC_CAUTION, caution);

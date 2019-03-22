@@ -1,5 +1,6 @@
 package org.janalyzer.gc;
 
+import org.janalyzer.util.Optional;
 import org.janalyzer.util.StringUtils;
 
 import java.util.regex.Matcher;
@@ -11,10 +12,10 @@ import static org.janalyzer.util.Constants.*;
 /**
  * @Author: Tboy
  */
-public abstract class CommonGCAction implements GCAction {
+public abstract class CommonGCAction implements Phase, GCAction {
 
     private static final String DATETIME_ACTION =
-            "(?<" + DATETIME + ">\\d{4}(-\\d{2}){2}T(\\d{2}:){2}\\d{2}\\.\\d{3}[-|+]\\d{4}:\\s.*)\\s*";
+            "(?<" + DATETIME + ">\\d{4}(-\\d{2}){2}T(\\d{2}:){2}\\d{2}\\.\\d{3}[-|+]\\d{4})\\s*";
 
     private static final String TIMES_ACTION =
             "\\s*\\[Times:" +
@@ -26,40 +27,51 @@ public abstract class CommonGCAction implements GCAction {
 
     private static final Pattern TIMES_PATTERN = Pattern.compile(TIMES_ACTION);
 
-    public void doCommonAction(String message, GCData data){
-        matchDatetime(message, data);
-        matchTimes(message, data);
+    public void action(String message, GCData data){
+        Optional<String> datetime = matchDatetime(message);
+        if(datetime.isPresent()){
+            data.setDatetime(datetime.get());
+        }
+        Optional<GCTime> times = matchTimes(message);
+        if(times.isPresent()){
+            data.setGcTime(times.get());
+        }
     }
 
-    public void matchDatetime(String message, GCData data){
+    protected Optional<String> matchDatetime(String message){
         //
         Matcher matcher = DATETIME_PATTERN.matcher(message);
         if (!matcher.find()) {
-            return;
+            return Optional.empty();
         }
         String datetime;
-        if (StringUtils.isNotEmpty(datetime = matcher.group(DATETIME))) {
-            data.addProperties(DATETIME, datetime);
-        }
+
+        return StringUtils.isNotEmpty(datetime = matcher.group(DATETIME)) ? Optional.of(datetime) : Optional.empty();
     }
 
-    public void matchTimes(String message, GCData data){
-        //
+    protected Optional<GCTime> matchTimes(String message){
+        if(!message.contains(TIMES)){
+            return Optional.empty();
+        }
         Matcher matcher = TIMES_PATTERN.matcher(message);
         if (!matcher.find()) {
-            return;
+            return Optional.empty();
         }
+
+        GCTime gcTime = new GCTime();
+
         String userTime;
         if (StringUtils.isNotEmpty(userTime = matcher.group(USER_TIME))) {
-            data.addProperties(USER_TIME, userTime);
+            gcTime.setUser(userTime);
         }
         String sysTime;
         if (StringUtils.isNotEmpty(sysTime = matcher.group(SYS_TIME))) {
-            data.addProperties(SYS_TIME, sysTime);
+            gcTime.setSys(sysTime);
         }
         String realTime;
         if (StringUtils.isNotEmpty(realTime = matcher.group(REAL_TIME))) {
-            data.addProperties(REAL_TIME, realTime);
+            gcTime.setReal(realTime);
         }
+        return Optional.of(gcTime);
     }
 }

@@ -1,5 +1,6 @@
 package org.janalyzer.gc.parnew;
 
+import org.janalyzer.gc.CommonGCAction;
 import org.janalyzer.gc.GCAction;
 import org.janalyzer.gc.GCData;
 import org.janalyzer.gc.GCType;
@@ -14,7 +15,7 @@ import static org.janalyzer.util.Constants.*;
 /**
  * @Author: Tboy
  */
-public class ParNewGCAction implements GCAction<Optional<GCData>> {
+public class ParNewGCAction extends CommonGCAction {
 
     public static final String PARNEW_ACTION = ".*" +
             "((\\[GC\\s\\((?<" +
@@ -52,6 +53,8 @@ public class ParNewGCAction implements GCAction<Optional<GCData>> {
         }
 
         GCData data = new GCData(GCType.PARNEW);
+
+        super.action(message, data);
 
         String caution;
         if(StringUtils.isNotEmpty(caution = matcher.group(PARNEW_CAUTION))){

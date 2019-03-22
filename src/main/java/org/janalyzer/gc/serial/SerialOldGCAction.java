@@ -1,5 +1,6 @@
 package org.janalyzer.gc.serial;
 
+import org.janalyzer.gc.CommonGCAction;
 import org.janalyzer.gc.GCAction;
 import org.janalyzer.gc.GCData;
 import org.janalyzer.gc.GCType;
@@ -14,7 +15,7 @@ import static org.janalyzer.util.Constants.*;
 /**
  * @Author: Tboy
  */
-public class SerialOldGCAction implements GCAction<Optional<GCData>> {
+public class SerialOldGCAction extends CommonGCAction {
 
     public static final String SERIAL_OLD_ACTION =
             ".*\\[Full GC\\s\\((?<" +
@@ -53,6 +54,8 @@ public class SerialOldGCAction implements GCAction<Optional<GCData>> {
         }
 
         GCData data = new GCData(GCType.SERIAL_OLD);
+
+        super.action(message, data);
 
         String caution;
         if (StringUtils.isNotEmpty(caution = matcher.group(SERIAL_OLD_CAUTION))) {

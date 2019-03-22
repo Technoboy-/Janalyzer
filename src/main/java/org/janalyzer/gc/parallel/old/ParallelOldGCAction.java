@@ -1,5 +1,6 @@
 package org.janalyzer.gc.parallel.old;
 
+import org.janalyzer.gc.CommonGCAction;
 import org.janalyzer.gc.GCAction;
 import org.janalyzer.gc.GCData;
 import org.janalyzer.gc.GCType;
@@ -14,7 +15,7 @@ import static org.janalyzer.util.Constants.*;
 /**
  * @Author: Tboy
  */
-public class ParallelOldGCAction implements GCAction<Optional<GCData>> {
+public class ParallelOldGCAction extends CommonGCAction {
 
     public static final String PARALLEL_OLD_ACTION =
             ".*\\[Full GC\\s\\((?<" +
@@ -60,6 +61,8 @@ public class ParallelOldGCAction implements GCAction<Optional<GCData>> {
         }
 
         GCData data = new GCData(GCType.PARALLEL_OLD);
+
+        super.action(message, data);
 
         String caution;
         if (StringUtils.isNotEmpty(caution = matcher.group(PARALLEL_OLD_CAUTION))) {

@@ -36,4 +36,13 @@ public class GCTime implements Serializable {
     public void setReal(String real) {
         this.real = real;
     }
+
+    @Override
+    public String toString() {
+        return "GCTime{" +
+                "user=" + user +
+                ", sys=" + sys +
+                ", real=" + real +
+                '}';
+    }
 }

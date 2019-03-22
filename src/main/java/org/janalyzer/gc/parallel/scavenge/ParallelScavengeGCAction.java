@@ -1,5 +1,6 @@
 package org.janalyzer.gc.parallel.scavenge;
 
+import org.janalyzer.gc.CommonGCAction;
 import org.janalyzer.gc.GCAction;
 import org.janalyzer.gc.GCData;
 import org.janalyzer.gc.GCType;
@@ -14,7 +15,7 @@ import static org.janalyzer.util.Constants.*;
 /**
  * @Author: Tboy
  */
-public class ParallelScavengeGCAction implements GCAction<Optional<GCData>> {
+public class ParallelScavengeGCAction extends CommonGCAction {
 
     public static final String PARALLEL_SCAVENGE_ACTION =
             ".*\\[GC\\s\\((?<" +
@@ -51,6 +52,8 @@ public class ParallelScavengeGCAction implements GCAction<Optional<GCData>> {
         }
 
         GCData data = new GCData(GCType.PARALLEL_SCAVENGE);
+
+        super.action(message, data);
 
         String caution;
         if (StringUtils.isNotEmpty(caution = matcher.group(PARALLEL_SCAVENGE_CAUTION))) {

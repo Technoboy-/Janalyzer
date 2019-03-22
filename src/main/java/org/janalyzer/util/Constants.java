@@ -8,6 +8,8 @@ public class Constants {
     //common
     public static final String DATETIME = "datetime";
 
+    public static final String TIMES = "Times";
+
     public static final String USER_TIME = "UserTime";
 
     public static final String SYS_TIME = "SysTime";

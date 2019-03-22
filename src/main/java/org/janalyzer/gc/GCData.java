@@ -80,8 +80,10 @@ public class GCData implements Serializable {
     @Override
     public String toString() {
         return "GCData{" +
-                "type=" + type +
+                "datetime=" + datetime +
+                ", type=" + type +
                 ", phases=" + phases +
+                ", gcTime=" + gcTime +
                 ", properties=" + properties +
                 '}';
     }

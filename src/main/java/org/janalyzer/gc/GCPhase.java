@@ -16,6 +16,8 @@ public class GCPhase implements Serializable {
 
     private Map<String, String> properties = new TreeMap<>();
 
+    private GCTime gcTime;
+
     public GCPhase() {
         //NOP
     }
@@ -52,11 +54,21 @@ public class GCPhase implements Serializable {
         this.properties.put(key, value);
     }
 
+    public GCTime getGcTime() {
+        return gcTime;
+    }
+
+    public void setGcTime(GCTime gcTime) {
+        this.gcTime = gcTime;
+    }
+
     @Override
     public String toString() {
         return "GCPhase{" +
-                "phase=" + phase +
+                "datetime=" + datetime +
+                ", phase=" + phase +
                 ", properties=" + properties +
+                ", gcTime=" + gcTime +
                 '}';
     }
 }
