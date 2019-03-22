@@ -1,9 +1,6 @@
 package org.janalyzer.gc.serial;
 
-import org.janalyzer.gc.CommonGCAction;
-import org.janalyzer.gc.GCAction;
-import org.janalyzer.gc.GCData;
-import org.janalyzer.gc.GCType;
+import org.janalyzer.gc.*;
 import org.janalyzer.util.Optional;
 import org.janalyzer.util.StringUtils;
 
@@ -44,56 +41,66 @@ public class SerialOldGCAction extends CommonGCAction {
     private static final Pattern SERIAL_OLD_PATTERN = Pattern.compile(SERIAL_OLD_ACTION);
 
     @Override
-    public Optional<GCData> action(String message) {
+    public boolean match(String message) {
         if(!message.contains(SERIAL_OLD)){
-            return Optional.empty();
+            return false;
         }
         Matcher matcher = SERIAL_OLD_PATTERN.matcher(message);
-        if (!matcher.find()) {
-            return Optional.empty();
-        }
 
-        GCData data = new GCData(GCType.SERIAL_OLD);
+        return matcher.find();
+    }
 
-        super.action(message, data);
-
+    @Override
+    public void doAction(String message, GCData gcData) {
+        //
+        Matcher matcher = SERIAL_OLD_PATTERN.matcher(message);
+        matcher.find();
+        //
         String caution;
         if (StringUtils.isNotEmpty(caution = matcher.group(SERIAL_OLD_CAUTION))) {
-            data.addProperties(SERIAL_OLD_CAUTION, caution);
+            gcData.addProperties(SERIAL_OLD_CAUTION, caution);
         }
         String oldUsageBefore;
         if (StringUtils.isNotEmpty(oldUsageBefore = matcher.group(OLD_USAGE_BEFORE))) {
-            data.addProperties(OLD_USAGE_BEFORE, oldUsageBefore);
+            gcData.addProperties(OLD_USAGE_BEFORE, oldUsageBefore);
         }
         String oldUsageAfter;
         if (StringUtils.isNotEmpty(oldUsageAfter = matcher.group(OLD_USAGE_AFTER))) {
-            data.addProperties(OLD_USAGE_AFTER, oldUsageAfter);
+            gcData.addProperties(OLD_USAGE_AFTER, oldUsageAfter);
         }
         String oldSize;
         if (StringUtils.isNotEmpty(oldSize = matcher.group(OLD_SIZE))) {
-            data.addProperties(OLD_SIZE, oldSize);
+            gcData.addProperties(OLD_SIZE, oldSize);
         }
         String cleanupOldDuration;
         if (StringUtils.isNotEmpty(cleanupOldDuration = matcher.group(SERIAL_OLD_CLEANUP_OLD_DURATION))) {
-            data.addProperties(SERIAL_OLD_CLEANUP_OLD_DURATION, cleanupOldDuration);
+            gcData.addProperties(SERIAL_OLD_CLEANUP_OLD_DURATION, cleanupOldDuration);
         }
         String heapUsageBefore;
         if (StringUtils.isNotEmpty(heapUsageBefore = matcher.group(HEAP_USAGE_BEFORE))) {
-            data.addProperties(HEAP_USAGE_BEFORE, heapUsageBefore);
+            gcData.addProperties(HEAP_USAGE_BEFORE, heapUsageBefore);
         }
         String heapUsageAfter;
         if (StringUtils.isNotEmpty(heapUsageAfter = matcher.group(HEAP_USAGE_AFTER))) {
-            data.addProperties(HEAP_USAGE_AFTER, heapUsageAfter);
+            gcData.addProperties(HEAP_USAGE_AFTER, heapUsageAfter);
         }
         String heapSize;
         if (StringUtils.isNotEmpty(heapSize = matcher.group(HEAP_SIZE))) {
-            data.addProperties(HEAP_SIZE, heapSize);
+            gcData.addProperties(HEAP_SIZE, heapSize);
         }
         String duration;
         if (StringUtils.isNotEmpty(duration = matcher.group(SERIAL_OLD_DURATION))) {
-            data.addProperties(SERIAL_OLD_DURATION, duration);
+            gcData.addProperties(SERIAL_OLD_DURATION, duration);
         }
-        //
-        return Optional.of(data);
+    }
+
+    @Override
+    public GCType type() {
+        return GCType.SERIAL_OLD;
+    }
+
+    @Override
+    public Optional<GCPhase> phase() {
+        return Optional.empty();
     }
 }

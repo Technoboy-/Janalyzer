@@ -1,7 +1,9 @@
 package org.janalyzer.gc.cms.phase;
 
+import org.janalyzer.gc.CommonGCAction;
+import org.janalyzer.gc.GCData;
 import org.janalyzer.gc.GCPhase;
-import org.janalyzer.gc.Phase;
+import org.janalyzer.gc.GCType;
 import org.janalyzer.util.Optional;
 import org.janalyzer.util.StringUtils;
 
@@ -13,7 +15,7 @@ import static org.janalyzer.util.Constants.*;
 /**
  * @Author: Tboy
  */
-public class CMSInitialMarkPhase implements Phase<Optional<GCPhase>> {
+public class CMSInitialMarkGCPhase extends CommonGCAction {
 
     public static final String INITIAL_MARK_PHASE = ".*" +
             CMS_INITIAL_MARK +
@@ -32,47 +34,54 @@ public class CMSInitialMarkPhase implements Phase<Optional<GCPhase>> {
     public static final Pattern INITIAL_MARK_PATTERN = Pattern.compile(INITIAL_MARK_PHASE);
 
     @Override
-    public Optional<GCPhase> action(String message) {
+    public boolean match(String message) {
         if(!message.contains(CMS_INITIAL_MARK)){
-            return Optional.empty();
+            return false;
         }
         Matcher matcher = INITIAL_MARK_PATTERN.matcher(message);
-        if (!matcher.find()) {
-            return Optional.empty();
-        }
 
-        GCPhase phase = new GCPhase(name());
+        return matcher.find();
+    }
+
+    @Override
+    public void doAction(String message, GCData gcData) {
+        //
+        Matcher matcher = INITIAL_MARK_PATTERN.matcher(message);
+        matcher.find();
         //
         String cmsOldUsageBefore;
         if (StringUtils.isNotEmpty(cmsOldUsageBefore = matcher.group(OLD_USAGE_BEFORE))) {
-            phase.addProperties(OLD_USAGE_BEFORE, cmsOldUsageBefore);
+            gcData.addProperties(OLD_USAGE_BEFORE, cmsOldUsageBefore);
         }
 
         String cmsOldSize;
         if (StringUtils.isNotEmpty(cmsOldSize = matcher.group(OLD_SIZE))) {
-            phase.addProperties(OLD_SIZE, cmsOldSize);
+            gcData.addProperties(OLD_SIZE, cmsOldSize);
         }
 
         String heapUsageBefore;
         if (StringUtils.isNotEmpty(heapUsageBefore = matcher.group(HEAP_USAGE_BEFORE))) {
-            phase.addProperties(HEAP_USAGE_BEFORE, heapUsageBefore);
+            gcData.addProperties(HEAP_USAGE_BEFORE, heapUsageBefore);
         }
 
         String heapSize;
         if (StringUtils.isNotEmpty(heapSize = matcher.group(HEAP_SIZE))) {
-            phase.addProperties(HEAP_SIZE, heapSize);
+            gcData.addProperties(HEAP_SIZE, heapSize);
         }
 
         String initialMarkDuration;
         if (StringUtils.isNotEmpty(initialMarkDuration = matcher.group(CMS_INITIAL_MARK_DURATION))) {
-            phase.addProperties(CMS_INITIAL_MARK_DURATION, initialMarkDuration);
+            gcData.addProperties(CMS_INITIAL_MARK_DURATION, initialMarkDuration);
         }
-
-        return Optional.of(phase);
     }
 
     @Override
-    public String name() {
-        return CMSPhase.CMS_INITIAL_MARK.name();
+    public GCType type() {
+        return GCType.CMS;
+    }
+
+    @Override
+    public Optional<GCPhase> phase() {
+        return Optional.of(new GCPhase(CMSPhase.CMS_INITIAL_MARK.name(), CMSPhase.CMS_INITIAL_MARK.isSTW()));
     }
 }

@@ -57,10 +57,6 @@ class JanalyzerImpl implements Janalyzer{
             }
 
             //
-            if(builder.getJdk() != null && builder.getJdk().getCode() < JDK.JDK8.getCode()){
-                actionMap.remove(GCType.G1);
-            }
-            //
             if(actionMap.get(GCType.G1) != null){
                 actionList.add(actionMap.get(GCType.G1));
             } else{
@@ -70,14 +66,22 @@ class JanalyzerImpl implements Janalyzer{
     }
 
     @Override
-    public Optional<GCData> analyze(String message) {
+    public Optional<List<GCData>> analyze(String message) {
+        List<GCData> gcDatas = new ArrayList<>();
         for(GCAction action : actionList){
-            Optional<GCData> result = (Optional<GCData>)action.action(message);
-            if(result.isPresent()){
-                return result;
+            if(action instanceof CMSGCAction || action instanceof G1GCAction){
+                Optional<List<GCData>> gcDataList = (Optional<List<GCData>>)action.action(message);
+                if(gcDataList.isPresent()){
+                    gcDatas.addAll(gcDataList.get());
+                }
+            } else{
+                Optional<GCData> gcData = (Optional<GCData>)action.action(message);
+                if(gcData.isPresent()){
+                    gcDatas.add(gcData.get());
+                }
             }
         }
-        return Optional.empty();
+        return CollectionUtils.isNotEmpty(gcDatas) ? Optional.of(gcDatas) : Optional.empty();
     }
 
     @Override
@@ -93,7 +97,7 @@ class JanalyzerImpl implements Janalyzer{
             case PARNEW:
                 return new Pair(type, new ParNewGCAction());
             case PARALLEL_SCAVENGE:
-                return new Pair(type,new ParallelScavengeGCAction());
+                return new Pair(type, new ParallelScavengeGCAction());
             case CMS:
                 return new Pair(type, new CMSGCAction());
             case SERIAL_OLD:

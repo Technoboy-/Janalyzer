@@ -52,7 +52,7 @@ public class CMSTest {
                 "(CMS Initial Mark) [1 CMS-initial-mark: 39506K(49152K)] " +
                 "784858K(1726912K), 0.0819508 secs] [Times: user=0.00 " +
                 "sys=0.00, real=0.08 secs] ";
-        CMSInitialMarkPhase phase = new CMSInitialMarkPhase();
+        CMSInitialMarkGCPhase phase = new CMSInitialMarkGCPhase();
         System.out.println(phase.action(message));
         //
         CMSGCAction action = new CMSGCAction();
@@ -62,14 +62,14 @@ public class CMSTest {
     @Test
     public void testConcurrentMark() {
         String message = "2019-03-18T15:03:39.501-0800: [CMS-concurrent-mark: 0.041/0.040 secs] [Times: user=0.11 sys=0.01, real=0.04 secs]";
-        CMSConcurrentMarkPhase phase = new CMSConcurrentMarkPhase();
+        CMSConcurrentMarkGCPhase phase = new CMSConcurrentMarkGCPhase();
         System.out.println(phase.action(message));
     }
 
     @Test
     public void testConcurrentPreclean() {
         String message = "2019-03-18T15:03:39.922-0800: [CMS-concurrent-preclean: 0.059/0.080 secs] [Times: user=0.13 sys=0.00, real=0.07 secs]";
-        CMSConcurrentPrecleanPhase phase = new CMSConcurrentPrecleanPhase();
+        CMSConcurrentPrecleanGCPhase phase = new CMSConcurrentPrecleanGCPhase();
         System.out.println(phase.action(message));
     }
 
@@ -84,21 +84,21 @@ public class CMSTest {
     @Test
     public void testFinalRemark() {
         String message = "2019-03-18T15:03:40.411-0800: [GC (CMS Final Remark) [YG occupancy: 0 K (68608 K)]2019-03-18T15:03:40.411-0800: [Rescan (parallel) , 0.0002597 secs]2019-03-18T15:03:40.411-0800: [weak refs processing, 0.0000120 secs]2019-03-18T15:03:40.411-0800: [class unloading, 0.0005750 secs]2019-03-18T15:03:40.412-0800: [scrub symbol table, 0.0004445 secs]2019-03-18T15:03:40.412-0800: [scrub string table, 0.0001678 secs][1 CMS-remark: 136519K(152420K)] 136520K(221028K), 0.0015073 secs] [Times: user=0.01 sys=0.00, real=0.00 secs] ";
-        CMSFinalRemarkPhase phase = new CMSFinalRemarkPhase();
+        CMSFinalRemarkGCPhase phase = new CMSFinalRemarkGCPhase();
         System.out.println(phase.action(message));
     }
 
     @Test
     public void testConcurrentSweep() {
         String message = "2019-03-18T15:03:39.548-0800: [CMS-concurrent-sweep: 0.002/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]";
-        CMSConcurrentSweepPhase phase = new CMSConcurrentSweepPhase();
+        CMSConcurrentSweepGCPhase phase = new CMSConcurrentSweepGCPhase();
         System.out.println(phase.action(message));
     }
 
     @Test
     public void testConcurrentReset() {
         String message = "2019-03-18T15:03:39.549-0800: [CMS-concurrent-reset: 0.001/0.001 secs] [Times: user=0.01 sys=0.00, real=0.00 secs] ";
-        CMSConcurrentResetPhase phase = new CMSConcurrentResetPhase();
+        CMSConcurrentResetGCPhase phase = new CMSConcurrentResetGCPhase();
         System.out.println(phase.action(message));
     }
 

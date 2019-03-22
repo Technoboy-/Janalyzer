@@ -1,7 +1,9 @@
 package org.janalyzer.gc.cms.phase;
 
+import org.janalyzer.gc.CommonGCAction;
+import org.janalyzer.gc.GCData;
 import org.janalyzer.gc.GCPhase;
-import org.janalyzer.gc.Phase;
+import org.janalyzer.gc.GCType;
 import org.janalyzer.util.Optional;
 import org.janalyzer.util.StringUtils;
 
@@ -14,7 +16,7 @@ import static org.janalyzer.util.Constants.CMS_CONCURRENT_ABORTABLE_PRECLEAN_DUR
 /**
  * @Author: Tboy
  */
-public class CMSConcurrentAbortablePrecleanPhase implements Phase<Optional<GCPhase>> {
+public class CMSConcurrentAbortablePrecleanPhase extends CommonGCAction {
 
     public static final String CONCURRENT_ABORTABLE_PRECLEAN_PHASE = ".*" +
             CMS_CONCURRENT_ABORTABLE_PRECLEAN +
@@ -25,28 +27,35 @@ public class CMSConcurrentAbortablePrecleanPhase implements Phase<Optional<GCPha
     public static final Pattern CONCURRENT_ABORTABLE_PRECLEAN_PHASE_PATTERN = Pattern.compile(CONCURRENT_ABORTABLE_PRECLEAN_PHASE);
 
     @Override
-    public Optional<GCPhase> action(String message) {
+    public boolean match(String message) {
         if(!message.contains(CMS_CONCURRENT_ABORTABLE_PRECLEAN)){
-            return Optional.empty();
+            return false;
         }
         Matcher matcher = CONCURRENT_ABORTABLE_PRECLEAN_PHASE_PATTERN.matcher(message);
         if (!matcher.find()) {
-            return Optional.empty();
+            return false;
         }
-
-        GCPhase phase = new GCPhase(name());
-        //
-        String concurrentAbortablePrecleanDuration;
-        if (StringUtils.isNotEmpty(concurrentAbortablePrecleanDuration = matcher.group(CMS_CONCURRENT_ABORTABLE_PRECLEAN_DURATION))) {
-            phase.addProperties(CMS_CONCURRENT_ABORTABLE_PRECLEAN_DURATION, concurrentAbortablePrecleanDuration);
-        }
-
-        return Optional.of(phase);
+        return true;
     }
 
     @Override
-    public String name() {
-        return CMSPhase.CMS_CONCURRENT_ABORTABLE_PRECLEAN.name();
+    public void doAction(String message, GCData gcData) {
+        //
+        Matcher matcher = CONCURRENT_ABORTABLE_PRECLEAN_PHASE_PATTERN.matcher(message);
+        //
+        String concurrentAbortablePrecleanDuration;
+        if (StringUtils.isNotEmpty(concurrentAbortablePrecleanDuration = matcher.group(CMS_CONCURRENT_ABORTABLE_PRECLEAN_DURATION))) {
+            gcData.addProperties(CMS_CONCURRENT_ABORTABLE_PRECLEAN_DURATION, concurrentAbortablePrecleanDuration);
+        }
     }
 
+    @Override
+    public GCType type() {
+        return GCType.CMS;
+    }
+
+    @Override
+    public Optional<GCPhase> phase() {
+        return Optional.of(new GCPhase(CMSPhase.CMS_CONCURRENT_ABORTABLE_PRECLEAN.name(), CMSPhase.CMS_CONCURRENT_ABORTABLE_PRECLEAN.isSTW()));
+    }
 }

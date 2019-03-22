@@ -1,10 +1,10 @@
 package org.janalyzer.gc.g1;
 
-import org.janalyzer.gc.GCPhase;
-import org.janalyzer.gc.Phase;
+import org.janalyzer.gc.GCAction;
+import org.janalyzer.gc.GCData;
 import org.janalyzer.gc.PhaseChain;
-import org.janalyzer.gc.cms.phase.*;
 import org.janalyzer.gc.g1.phase.*;
+import org.janalyzer.util.CollectionUtils;
 import org.janalyzer.util.Optional;
 
 import java.util.ArrayList;
@@ -16,25 +16,25 @@ import java.util.List;
  */
 public class G1PhaseChain implements PhaseChain {
 
-    private static final List<Phase> phases = new ArrayList<>();
+    private static final List<GCAction> GC_PHASES = new ArrayList<>();
 
     static{
-        phases.add(new G1InitialMarkPhase());
-        phases.add(new G1RootRegionScanPhase());
-        phases.add(new G1ConcurrentMarkPhase());
-        phases.add(new G1RemarkPhase());
-        phases.add(new G1CleanupPhase());
+        GC_PHASES.add(new G1InitialMarkGCPhase());
+        GC_PHASES.add(new G1RootRegionScanGCPhase());
+        GC_PHASES.add(new G1ConcurrentMarkGCPhase());
+        GC_PHASES.add(new G1RemarkGCPhase());
+        GC_PHASES.add(new G1CleanupGCPhase());
     }
 
     @Override
-    public List<GCPhase> doPhase(String message) {
-        List<GCPhase> gcPhases = new LinkedList<>();
-        for(Phase phaseAction : phases){
-            Optional<GCPhase> phase = (Optional<GCPhase>)phaseAction.action(message);
+    public Optional<List<GCData>> doPhase(String message) {
+        List<GCData> gcPhases = new LinkedList<>();
+        for(GCAction gc : GC_PHASES){
+            Optional<GCData> phase = (Optional<GCData>) gc.action(message);
             if(phase.isPresent()){
                 gcPhases.add(phase.get());
             }
         }
-        return gcPhases;
+        return CollectionUtils.isNotEmpty(gcPhases) ? Optional.of(gcPhases) : Optional.empty();
     }
 }

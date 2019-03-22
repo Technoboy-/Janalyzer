@@ -5,10 +5,12 @@ import org.janalyzer.util.Collector;
 import org.janalyzer.util.Optional;
 import org.junit.Test;
 
+import java.util.List;
+
 /**
  * @Author: Tboy
  */
-public class JanalyzerTest {
+public class JanalyzerDemoTest {
 
     @Test
     public void testJanalyzer(){
@@ -25,7 +27,7 @@ public class JanalyzerTest {
                 "2019-03-18T15:03:39.249-0800: [CMS-concurrent-reset: 0.001/0.001 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]";
 
         Janalyzer janalyzer = JanalyzerFactory.builder().withCollecor(new Collector.All()).build();
-        Optional<GCData> analyze = janalyzer.analyze(message);
+        Optional<List<GCData>> analyze = janalyzer.analyze(message);
         System.out.println(analyze.get());
     }
 }

@@ -1,9 +1,6 @@
 package org.janalyzer.gc.parallel.scavenge;
 
-import org.janalyzer.gc.CommonGCAction;
-import org.janalyzer.gc.GCAction;
-import org.janalyzer.gc.GCData;
-import org.janalyzer.gc.GCType;
+import org.janalyzer.gc.*;
 import org.janalyzer.util.Optional;
 import org.janalyzer.util.StringUtils;
 
@@ -42,52 +39,62 @@ public class ParallelScavengeGCAction extends CommonGCAction {
 
 
     @Override
-    public Optional<GCData> action(String message) {
+    public boolean match(String message) {
         if(!message.contains(PARALLEL_SCAVENGE)){
-            return Optional.empty();
+            return false;
         }
         Matcher matcher = PARALLEL_SCAVENGE_PATTERN.matcher(message);
-        if (!matcher.find()) {
-            return Optional.empty();
-        }
 
-        GCData data = new GCData(GCType.PARALLEL_SCAVENGE);
+        return matcher.find();
+    }
 
-        super.action(message, data);
-
+    @Override
+    public void doAction(String message, GCData gcData) {
+        //
+        Matcher matcher = PARALLEL_SCAVENGE_PATTERN.matcher(message);
+        matcher.find();
+        //
         String caution;
         if (StringUtils.isNotEmpty(caution = matcher.group(PARALLEL_SCAVENGE_CAUTION))) {
-            data.addProperties(PARALLEL_SCAVENGE_CAUTION, caution);
+            gcData.addProperties(PARALLEL_SCAVENGE_CAUTION, caution);
         }
         String youngUsageBefore;
         if (StringUtils.isNotEmpty(youngUsageBefore = matcher.group(YOUNG_USAGE_BEFORE))) {
-            data.addProperties(YOUNG_USAGE_BEFORE, youngUsageBefore);
+            gcData.addProperties(YOUNG_USAGE_BEFORE, youngUsageBefore);
         }
         String youngUsageAfter;
         if (StringUtils.isNotEmpty(youngUsageAfter = matcher.group(YOUNG_USAGE_AFTER))) {
-            data.addProperties(YOUNG_USAGE_AFTER, youngUsageAfter);
+            gcData.addProperties(YOUNG_USAGE_AFTER, youngUsageAfter);
         }
         String youngSize;
         if (StringUtils.isNotEmpty(youngSize = matcher.group(YOUNG_SIZE))) {
-            data.addProperties(YOUNG_SIZE, youngSize);
+            gcData.addProperties(YOUNG_SIZE, youngSize);
         }
         String heapUsageBefore;
         if (StringUtils.isNotEmpty(heapUsageBefore = matcher.group(HEAP_USAGE_BEFORE))) {
-            data.addProperties(HEAP_USAGE_BEFORE, heapUsageBefore);
+            gcData.addProperties(HEAP_USAGE_BEFORE, heapUsageBefore);
         }
         String heapUsageAfter;
         if (StringUtils.isNotEmpty(heapUsageAfter = matcher.group(HEAP_USAGE_AFTER))) {
-            data.addProperties(HEAP_USAGE_AFTER, heapUsageAfter);
+            gcData.addProperties(HEAP_USAGE_AFTER, heapUsageAfter);
         }
         String heapSize;
         if (StringUtils.isNotEmpty(heapSize = matcher.group(HEAP_SIZE))) {
-            data.addProperties(HEAP_SIZE, heapSize);
+            gcData.addProperties(HEAP_SIZE, heapSize);
         }
         String duration;
         if (StringUtils.isNotEmpty(duration = matcher.group(PARALLEL_SCAVENGE_DURATION))) {
-            data.addProperties(PARALLEL_SCAVENGE_DURATION, duration);
+            gcData.addProperties(PARALLEL_SCAVENGE_DURATION, duration);
         }
-        //
-        return Optional.of(data);
+    }
+
+    @Override
+    public GCType type() {
+        return GCType.PARALLEL_SCAVENGE;
+    }
+
+    @Override
+    public Optional<GCPhase> phase() {
+        return Optional.empty();
     }
 }

@@ -1,74 +1,46 @@
 package org.janalyzer.gc;
 
-
 import java.io.Serializable;
-import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * @Author: Tboy
  */
 public class GCPhase implements Serializable {
 
-    private String datetime;
+    private String name;
 
-    private String phase;
-
-    private Map<String, String> properties = new TreeMap<>();
-
-    private GCTime gcTime;
+    private boolean isStopTheWorld;
 
     public GCPhase() {
         //NOP
     }
 
-    public GCPhase(String phase) {
-        this.phase = phase;
+    public GCPhase(String name, boolean isStopTheWorld) {
+        this.name = name;
+        this.isStopTheWorld = isStopTheWorld;
     }
 
-    public String getDatetime() {
-        return datetime;
+    public String getName() {
+        return name;
     }
 
-    public void setDatetime(String datetime) {
-        this.datetime = datetime;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPhase() {
-        return phase;
+    public boolean isStopTheWorld() {
+        return isStopTheWorld;
     }
 
-    public void setPhase(String phase) {
-        this.phase = phase;
-    }
-
-    public Map<String, String> getProperties() {
-        return properties;
-    }
-
-    public void setProperties(Map<String, String> properties) {
-        this.properties = properties;
-    }
-
-    public void addProperties(String key, String value) {
-        this.properties.put(key, value);
-    }
-
-    public GCTime getGcTime() {
-        return gcTime;
-    }
-
-    public void setGcTime(GCTime gcTime) {
-        this.gcTime = gcTime;
+    public void setStopTheWorld(boolean stopTheWorld) {
+        isStopTheWorld = stopTheWorld;
     }
 
     @Override
     public String toString() {
         return "GCPhase{" +
-                "datetime=" + datetime +
-                ", phase=" + phase +
-                ", properties=" + properties +
-                ", gcTime=" + gcTime +
+                "name=" + name +
+                ", isStopTheWorld=" + isStopTheWorld +
                 '}';
     }
 }

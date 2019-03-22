@@ -1,7 +1,9 @@
 package org.janalyzer.gc.cms.phase;
 
+import org.janalyzer.gc.CommonGCAction;
+import org.janalyzer.gc.GCData;
 import org.janalyzer.gc.GCPhase;
-import org.janalyzer.gc.Phase;
+import org.janalyzer.gc.GCType;
 import org.janalyzer.util.Optional;
 import org.janalyzer.util.StringUtils;
 
@@ -14,7 +16,7 @@ import static org.janalyzer.util.Constants.CMS_CONCURRENT_SWEEP_DURATION;
 /**
  * @Author: Tboy
  */
-public class CMSConcurrentSweepPhase implements Phase<Optional<GCPhase>> {
+public class CMSConcurrentSweepGCPhase extends CommonGCAction {
 
     public static final String CONCURRENT_SWEEP_PHASE = ".*" +
             CMS_CONCURRENT_SWEEP +
@@ -25,27 +27,34 @@ public class CMSConcurrentSweepPhase implements Phase<Optional<GCPhase>> {
     public static final Pattern CONCURRENT_SWEEP_PATTERN = Pattern.compile(CONCURRENT_SWEEP_PHASE);
 
     @Override
-    public Optional<GCPhase> action(String message) {
+    public boolean match(String message) {
         if(!message.contains(CMS_CONCURRENT_SWEEP)){
-            return Optional.empty();
+            return false;
         }
         Matcher matcher = CONCURRENT_SWEEP_PATTERN.matcher(message);
-        if (!matcher.find()) {
-            return Optional.empty();
-        }
-        GCPhase phase = new GCPhase(name());
-        //
-        String concurrentSweepDuration;
-        if (StringUtils.isNotEmpty(concurrentSweepDuration = matcher.group(CMS_CONCURRENT_SWEEP_DURATION))) {
-            phase.addProperties(CMS_CONCURRENT_SWEEP_DURATION, concurrentSweepDuration);
-        }
-        //
-        return Optional.of(phase);
+
+        return matcher.find();
     }
 
     @Override
-    public String name() {
-        return CMSPhase.CMS_CONCURRENT_SWEEP.name();
+    public void doAction(String message, GCData gcData) {
+        //
+        Matcher matcher = CONCURRENT_SWEEP_PATTERN.matcher(message);
+        matcher.find();
+        //
+        String concurrentSweepDuration;
+        if (StringUtils.isNotEmpty(concurrentSweepDuration = matcher.group(CMS_CONCURRENT_SWEEP_DURATION))) {
+            gcData.addProperties(CMS_CONCURRENT_SWEEP_DURATION, concurrentSweepDuration);
+        }
     }
 
+    @Override
+    public GCType type() {
+        return GCType.CMS;
+    }
+
+    @Override
+    public Optional<GCPhase> phase() {
+        return Optional.of(new GCPhase(CMSPhase.CMS_CONCURRENT_SWEEP.name(), CMSPhase.CMS_CONCURRENT_SWEEP.isSTW()));
+    }
 }

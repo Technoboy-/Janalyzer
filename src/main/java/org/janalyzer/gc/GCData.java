@@ -1,8 +1,9 @@
 package org.janalyzer.gc;
 
+
+import org.janalyzer.util.Optional;
+
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -15,18 +16,15 @@ public class GCData implements Serializable {
 
     private GCType type;
 
-    private List<GCPhase> phases = new LinkedList<>();
+    private Optional<GCPhase> phase;
 
     private GCTime gcTime;
 
     private Map<String, String> properties = new TreeMap<>();
 
+
     public GCData() {
         //NOP
-    }
-
-    public GCData(GCType type) {
-        this.type = type;
     }
 
     public String getDatetime() {
@@ -65,16 +63,12 @@ public class GCData implements Serializable {
         this.properties.put(key, value);
     }
 
-    public List<GCPhase> getPhases() {
-        return phases;
+    public Optional<GCPhase> getPhase() {
+        return phase;
     }
 
-    public void setPhases(List<GCPhase> phases) {
-        this.phases = phases;
-    }
-
-    public void addPhases(GCPhase phase) {
-        this.phases.add(phase);
+    public void setPhase(Optional<GCPhase> phase) {
+        this.phase = phase;
     }
 
     @Override
@@ -82,7 +76,7 @@ public class GCData implements Serializable {
         return "GCData{" +
                 "datetime=" + datetime +
                 ", type=" + type +
-                ", phases=" + phases +
+                ", phase=" + phase +
                 ", gcTime=" + gcTime +
                 ", properties=" + properties +
                 '}';

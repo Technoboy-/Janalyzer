@@ -1,9 +1,10 @@
 package org.janalyzer.gc.cms;
 
-import org.janalyzer.gc.GCPhase;
-import org.janalyzer.gc.Phase;
+import org.janalyzer.gc.GCAction;
+import org.janalyzer.gc.GCData;
 import org.janalyzer.gc.PhaseChain;
 import org.janalyzer.gc.cms.phase.*;
+import org.janalyzer.util.CollectionUtils;
 import org.janalyzer.util.Optional;
 
 import java.util.ArrayList;
@@ -15,27 +16,27 @@ import java.util.List;
  */
 public class CMSPhaseChain implements PhaseChain {
 
-    private static final List<Phase> phases = new ArrayList<>();
+    private static final List<GCAction> GC_PHASES = new ArrayList<>();
 
     static{
-        phases.add(new CMSInitialMarkPhase());
-        phases.add(new CMSConcurrentMarkPhase());
-        phases.add(new CMSConcurrentPrecleanPhase());
-        phases.add(new CMSConcurrentAbortablePrecleanPhase());
-        phases.add(new CMSFinalRemarkPhase());
-        phases.add(new CMSConcurrentSweepPhase());
-        phases.add(new CMSConcurrentResetPhase());
+        GC_PHASES.add(new CMSInitialMarkGCPhase());
+        GC_PHASES.add(new CMSConcurrentMarkGCPhase());
+        GC_PHASES.add(new CMSConcurrentPrecleanGCPhase());
+        GC_PHASES.add(new CMSConcurrentAbortablePrecleanPhase());
+        GC_PHASES.add(new CMSFinalRemarkGCPhase());
+        GC_PHASES.add(new CMSConcurrentSweepGCPhase());
+        GC_PHASES.add(new CMSConcurrentResetGCPhase());
     }
 
     @Override
-    public List<GCPhase> doPhase(String message) {
-        List<GCPhase> gcPhases = new LinkedList<>();
-        for(Phase phaseAction : phases){
-            Optional<GCPhase> phase = (Optional<GCPhase>)phaseAction.action(message);
+    public Optional<List<GCData>> doPhase(String message) {
+        List<GCData> gcPhases = new LinkedList<>();
+        for(GCAction gc : GC_PHASES){
+            Optional<GCData> phase = (Optional<GCData>) gc.action(message);
             if(phase.isPresent()){
                 gcPhases.add(phase.get());
             }
         }
-        return gcPhases;
+        return CollectionUtils.isNotEmpty(gcPhases) ? Optional.of(gcPhases) : Optional.empty();
     }
 }

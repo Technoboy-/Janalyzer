@@ -1,8 +1,8 @@
 package org.janalyzer.gc.parallel.old;
 
 import org.janalyzer.gc.CommonGCAction;
-import org.janalyzer.gc.GCAction;
 import org.janalyzer.gc.GCData;
+import org.janalyzer.gc.GCPhase;
 import org.janalyzer.gc.GCType;
 import org.janalyzer.util.Optional;
 import org.janalyzer.util.StringUtils;
@@ -51,64 +51,77 @@ public class ParallelOldGCAction extends CommonGCAction {
     private static final Pattern PARALLEL_OLD_PATTERN = Pattern.compile(PARALLEL_OLD_ACTION);
 
     @Override
-    public Optional<GCData> action(String message) {
+    public boolean match(String message) {
         if(!message.contains(PARALLEL_SCAVENGE) || !message.contains(PARALLEL_OLD)){
-            return Optional.empty();
+            return false;
         }
         Matcher matcher = PARALLEL_OLD_PATTERN.matcher(message);
-        if (!matcher.find()) {
-            return Optional.empty();
-        }
 
-        GCData data = new GCData(GCType.PARALLEL_OLD);
+        return matcher.find();
+    }
 
-        super.action(message, data);
-
+    @Override
+    public void doAction(String message, GCData gcData) {
+        //
+        Matcher matcher = PARALLEL_OLD_PATTERN.matcher(message);
+        matcher.find();
+        //
+        //
         String caution;
         if (StringUtils.isNotEmpty(caution = matcher.group(PARALLEL_OLD_CAUTION))) {
-            data.addProperties(PARALLEL_OLD_CAUTION, caution);
+            gcData.addProperties(PARALLEL_OLD_CAUTION, caution);
         }
         String youngUsageBefore;
         if (StringUtils.isNotEmpty(youngUsageBefore = matcher.group(YOUNG_USAGE_BEFORE))) {
-            data.addProperties(YOUNG_USAGE_BEFORE, youngUsageBefore);
+            gcData.addProperties(YOUNG_USAGE_BEFORE, youngUsageBefore);
         }
         String youngUsageAfter;
         if (StringUtils.isNotEmpty(youngUsageAfter = matcher.group(YOUNG_USAGE_AFTER))) {
-            data.addProperties(YOUNG_USAGE_AFTER, youngUsageAfter);
+            gcData.addProperties(YOUNG_USAGE_AFTER, youngUsageAfter);
         }
         String youngSize;
         if (StringUtils.isNotEmpty(youngSize = matcher.group(YOUNG_SIZE))) {
-            data.addProperties(YOUNG_SIZE, youngSize);
+            gcData.addProperties(YOUNG_SIZE, youngSize);
         }
         String oldUsageBefore;
         if (StringUtils.isNotEmpty(oldUsageBefore = matcher.group(OLD_USAGE_BEFORE))) {
-            data.addProperties(OLD_USAGE_BEFORE, oldUsageBefore);
+            gcData.addProperties(OLD_USAGE_BEFORE, oldUsageBefore);
         }
         String oldUsageAfter;
         if (StringUtils.isNotEmpty(oldUsageAfter = matcher.group(OLD_USAGE_AFTER))) {
-            data.addProperties(OLD_USAGE_AFTER, oldUsageAfter);
+            gcData.addProperties(OLD_USAGE_AFTER, oldUsageAfter);
         }
         String oldSize;
         if (StringUtils.isNotEmpty(oldSize = matcher.group(OLD_SIZE))) {
-            data.addProperties(OLD_SIZE, oldSize);
+            gcData.addProperties(OLD_SIZE, oldSize);
         }
         String heapUsageBefore;
         if (StringUtils.isNotEmpty(heapUsageBefore = matcher.group(HEAP_USAGE_BEFORE))) {
-            data.addProperties(HEAP_USAGE_BEFORE, heapUsageBefore);
+            gcData.addProperties(HEAP_USAGE_BEFORE, heapUsageBefore);
         }
         String heapUsageAfter;
         if (StringUtils.isNotEmpty(heapUsageAfter = matcher.group(HEAP_USAGE_AFTER))) {
-            data.addProperties(HEAP_USAGE_AFTER, heapUsageAfter);
+            gcData.addProperties(HEAP_USAGE_AFTER, heapUsageAfter);
         }
         String heapSize;
         if (StringUtils.isNotEmpty(heapSize = matcher.group(HEAP_SIZE))) {
-            data.addProperties(HEAP_SIZE, heapSize);
+            gcData.addProperties(HEAP_SIZE, heapSize);
         }
         String duration;
         if (StringUtils.isNotEmpty(duration = matcher.group(PARALLEL_OLD_DURATION))) {
-            data.addProperties(PARALLEL_OLD_DURATION, duration);
+            gcData.addProperties(PARALLEL_OLD_DURATION, duration);
         }
-        //
-        return Optional.of(data);
     }
+
+    @Override
+    public GCType type() {
+        return GCType.PARALLEL_OLD;
+    }
+
+    @Override
+    public Optional<GCPhase> phase() {
+        return Optional.empty();
+    }
+
+
 }

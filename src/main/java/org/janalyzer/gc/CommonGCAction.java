@@ -12,7 +12,7 @@ import static org.janalyzer.util.Constants.*;
 /**
  * @Author: Tboy
  */
-public abstract class CommonGCAction implements Phase, GCAction {
+public abstract class CommonGCAction implements GCAction<Optional<GCData>> {
 
     private static final String DATETIME_ACTION =
             "(?<" + DATETIME + ">\\d{4}(-\\d{2}){2}T(\\d{2}:){2}\\d{2}\\.\\d{3}[-|+]\\d{4})\\s*";
@@ -27,15 +27,32 @@ public abstract class CommonGCAction implements Phase, GCAction {
 
     private static final Pattern TIMES_PATTERN = Pattern.compile(TIMES_ACTION);
 
-    public void action(String message, GCData data){
+    public abstract boolean match(String message);
+
+    public abstract void doAction(String message, GCData gcData);
+
+    public Optional<GCData> action(String message){
+        if(!match(message)){
+            return Optional.empty();
+        }
+        GCData gcData = new GCData();
+        gcData.setType(type());
+        if(phase().isPresent()){
+            gcData.setPhase(phase());
+        }
+        //
         Optional<String> datetime = matchDatetime(message);
         if(datetime.isPresent()){
-            data.setDatetime(datetime.get());
+            gcData.setDatetime(datetime.get());
         }
         Optional<GCTime> times = matchTimes(message);
         if(times.isPresent()){
-            data.setGcTime(times.get());
+            gcData.setGcTime(times.get());
         }
+
+        doAction(message, gcData);
+
+        return Optional.of(gcData);
     }
 
     protected Optional<String> matchDatetime(String message){

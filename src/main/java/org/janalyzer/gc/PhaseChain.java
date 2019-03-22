@@ -1,6 +1,8 @@
 package org.janalyzer.gc;
 
 
+import org.janalyzer.util.Optional;
+
 import java.util.List;
 
 /**
@@ -8,5 +10,5 @@ import java.util.List;
  */
 public interface PhaseChain{
 
-    List<GCPhase> doPhase(String message);
+    Optional<List<GCData>> doPhase(String message);
 }

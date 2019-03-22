@@ -76,7 +76,7 @@ public class G1Test {
                 "   [Eden: 3072.0K(3072.0K)->0.0B(2048.0K) Survivors: 0.0B->1024.0K Heap: 3072.0K(6144.0K)->832.3K(6144.0K)]\n" +
                 " [Times: user=0.01 sys=0.00, real=0.01 secs]";
 
-        G1InitialMarkPhase phase = new G1InitialMarkPhase();
+        G1InitialMarkGCPhase phase = new G1InitialMarkGCPhase();
 
         System.out.println(phase.action(message));
     }
@@ -86,7 +86,7 @@ public class G1Test {
 
         String message = "2019-03-20T10:32:16.938-0800: [GC concurrent-root-region-scan-end, 0.0004932 secs]";
 
-        G1RootRegionScanPhase phase = new G1RootRegionScanPhase();
+        G1RootRegionScanGCPhase phase = new G1RootRegionScanGCPhase();
 
         System.out.println(phase.action(message));
     }
@@ -96,7 +96,7 @@ public class G1Test {
 
         String message = "2019-03-20T10:32:16.940-0800: [GC concurrent-mark-end, 0.0021129 secs]";
 
-        G1ConcurrentMarkPhase phase = new G1ConcurrentMarkPhase();
+        G1ConcurrentMarkGCPhase phase = new G1ConcurrentMarkGCPhase();
 
         System.out.println(phase.action(message));
     }
@@ -106,7 +106,7 @@ public class G1Test {
 
         String message = "2019-03-20T10:32:16.941-0800: [GC remark 2019-03-20T10:32:16.941-0800: [Finalize Marking, 0.0012042 secs] 2019-03-20T10:32:16.942-0800: [GC ref-proc, 0.0000551 secs] 2019-03-20T10:32:16.942-0800: [Unloading, 0.0009181 secs], 0.0023219 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]";
 
-        G1RemarkPhase phase = new G1RemarkPhase();
+        G1RemarkGCPhase phase = new G1RemarkGCPhase();
 
         System.out.println(phase.action(message));
     }
@@ -116,7 +116,7 @@ public class G1Test {
 
         String message = "2019-03-20T10:32:16.943-0800: [GC cleanup 2347K->2347K(6144K), 0.0003618 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]";
 
-        G1CleanupPhase phase = new G1CleanupPhase();
+        G1CleanupGCPhase phase = new G1CleanupGCPhase();
 
         System.out.println(phase.action(message));
     }

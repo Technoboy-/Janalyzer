@@ -17,7 +17,7 @@ Janalyzer致力于解析jvm的GC日志，输出易读的方式,外加少量统�
    输入一段gc日志，可以解析出日志的类型以及更多细节信息。
    ```
    ```java
-   public class Janalyzer {
+   public class JanalyzerDemo {
    
        public static void main(String[] args) {
            String message = "2019-03-18T15:03:39.204-0800: [GC (CMS Initial Mark) [1 CMS-initial-mark: 28020K(42092K)] 28020K(53868K), 0.0007546 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]" +
@@ -30,7 +30,7 @@ Janalyzer致力于解析jvm的GC日志，输出易读的方式,外加少量统�
                    "2019-03-18T15:03:39.248-0800: [CMS-concurrent-sweep: 0.001/0.001 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]" +
                    "2019-03-18T15:03:39.248-0800: [CMS-concurrent-reset-start]" +
                    "2019-03-18T15:03:39.249-0800: [CMS-concurrent-reset: 0.001/0.001 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]";
-           org.janalyzer.Janalyzer janalyzer = JanalyzerFactory.builder().withCollecor(new Collector.All()).build();
+           org.janalyzer.JanalyzerDemo janalyzer = JanalyzerFactory.builder().withCollecor(new Collector.All()).build();
            Optional<GCData> analyze = janalyzer.analyze(message);
            System.out.println(analyze.get());
        }

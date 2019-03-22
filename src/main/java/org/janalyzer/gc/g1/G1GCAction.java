@@ -4,7 +4,9 @@ import org.janalyzer.gc.*;
 import org.janalyzer.util.CollectionUtils;
 import org.janalyzer.util.Optional;
 import org.janalyzer.util.StringUtils;
+import sun.misc.GC;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -15,30 +17,33 @@ import static org.janalyzer.util.Constants.*;
 /**
  * @Author: Tboy
  */
-public class G1GCAction implements GCAction<Optional<GCData>> {
+public class G1GCAction implements GCAction<Optional<List<GCData>>> {
 
     private final G1FullGCAction fullGCAction = new G1FullGCAction();
 
     private final PhaseChain phaseChain = new G1PhaseChain();
 
-    @Override
-    public Optional<GCData> action(String message) {
+    public Optional<List<GCData>> action(String message) {
 
         Optional<GCData> fullAction = fullGCAction.action(message);
         if(fullAction.isPresent()){
-            return fullAction;
+            return Optional.of(Arrays.asList(fullAction.get()));
         } else{
-            List<GCPhase> gcPhases = phaseChain.doPhase(message);
-            if(CollectionUtils.isNotEmpty(gcPhases)){
-                GCData data = new GCData(GCType.G1);
-                data.setPhases(gcPhases);
-                return Optional.of(data);
-            }
-            return Optional.empty();
+            return phaseChain.doPhase(message);
         }
     }
 
-    static class G1FullGCAction implements GCAction<Optional<GCData>>{
+    @Override
+    public GCType type() {
+        return GCType.G1;
+    }
+
+    @Override
+    public Optional<GCPhase> phase() {
+        return Optional.empty();
+    }
+
+    static class G1FullGCAction extends CommonGCAction{
 
         public static final String FULL_GC_ACTION =
                 ".*" + FULL_GC + "\\s\\((?<" +
@@ -53,59 +58,71 @@ public class G1GCAction implements GCAction<Optional<GCData>> {
         public static final Pattern FULL_GC_PATTERN = Pattern.compile(FULL_GC_ACTION);
 
         @Override
-        public Optional<GCData> action(String message) {
+        public boolean match(String message) {
             if(!message.contains(FULL_GC)){
-                return Optional.empty();
+                return false;
             }
             Matcher matcher = FULL_GC_PATTERN.matcher(message);
-            if (!matcher.find()) {
-                return Optional.empty();
-            }
-            GCData data = new GCData(GCType.G1);
 
+            return matcher.find();
+        }
+
+        @Override
+        public void doAction(String message, GCData gcData) {
+            //
+            Matcher matcher = FULL_GC_PATTERN.matcher(message);
+            matcher.find();
+            //
             String caution;
             if (StringUtils.isNotEmpty(caution = matcher.group(G1_FULL_GC_CAUTION))) {
-                data.addProperties(G1_FULL_GC_CAUTION, caution);
+                gcData.addProperties(G1_FULL_GC_CAUTION, caution);
             }
             String duration;
             if (StringUtils.isNotEmpty(duration = matcher.group(G1_FULL_GC_DURATION))) {
-                data.addProperties(G1_FULL_GC_DURATION, duration);
+                gcData.addProperties(G1_FULL_GC_DURATION, duration);
             }
             String edenUsageBefore;
             if (StringUtils.isNotEmpty(edenUsageBefore = matcher.group(EDEN_USAGE_BEFORE))) {
-                data.addProperties(EDEN_USAGE_BEFORE, edenUsageBefore);
+                gcData.addProperties(EDEN_USAGE_BEFORE, edenUsageBefore);
             }
             String edenSize;
             if (StringUtils.isNotEmpty(edenSize = matcher.group(EDEN_SIZE))) {
-                data.addProperties(EDEN_SIZE, edenSize);
+                gcData.addProperties(EDEN_SIZE, edenSize);
             }
             String edenUsageAfter;
             if (StringUtils.isNotEmpty(edenUsageAfter = matcher.group(EDEN_USAGE_AFTER))) {
-                data.addProperties(EDEN_USAGE_AFTER, edenUsageAfter);
+                gcData.addProperties(EDEN_USAGE_AFTER, edenUsageAfter);
             }
             String survivorBefore;
             if (StringUtils.isNotEmpty(survivorBefore = matcher.group(SURVIVOR_BEFORE))) {
-                data.addProperties(SURVIVOR_BEFORE, survivorBefore);
+                gcData.addProperties(SURVIVOR_BEFORE, survivorBefore);
             }
             String survivorAfter;
             if (StringUtils.isNotEmpty(survivorAfter = matcher.group(SURVIVOR_AFTER))) {
-                data.addProperties(SURVIVOR_AFTER, survivorAfter);
+                gcData.addProperties(SURVIVOR_AFTER, survivorAfter);
             }
             String heapUsageBefore;
             if (StringUtils.isNotEmpty(heapUsageBefore = matcher.group(HEAP_USAGE_BEFORE))) {
-                data.addProperties(HEAP_USAGE_BEFORE, heapUsageBefore);
+                gcData.addProperties(HEAP_USAGE_BEFORE, heapUsageBefore);
             }
             String heapUsageAfter;
             if (StringUtils.isNotEmpty(heapUsageAfter = matcher.group(HEAP_USAGE_AFTER))) {
-                data.addProperties(HEAP_USAGE_AFTER, heapUsageAfter);
+                gcData.addProperties(HEAP_USAGE_AFTER, heapUsageAfter);
             }
             String heapSize;
             if (StringUtils.isNotEmpty(heapSize = matcher.group(HEAP_SIZE))) {
-                data.addProperties(HEAP_SIZE, heapSize);
+                gcData.addProperties(HEAP_SIZE, heapSize);
             }
-            //
-            return Optional.of(data);
+        }
 
+        @Override
+        public GCType type() {
+            return GCType.G1;
+        }
+
+        @Override
+        public Optional<GCPhase> phase() {
+            return Optional.empty();
         }
     }
 }
