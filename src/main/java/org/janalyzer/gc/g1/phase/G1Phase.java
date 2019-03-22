@@ -5,6 +5,8 @@ package org.janalyzer.gc.g1.phase;
  */
 public enum G1Phase {
 
+    G1_FULL_GC("full GC", true),
+
     G1_INITIAL_MARK("它标记了从GC Root开始直接可达的对象, STW", true),
 
     G1_ROOT_REGION_SCAN("标记所有GC Root可达的对象", false),

@@ -5,6 +5,8 @@ package org.janalyzer.gc.cms.phase;
  */
 public enum CMSPhase {
 
+    CMS_FULL_GC("full GC", true),
+
     CMS_INITIAL_MARK("它有两个目标：一是标记老年代中所有的GC Roots；二是标记年轻代中活着的对象引用的对象。STW", true),
 
     CMS_CONCURRENT_MARK("这个阶段会遍历整个老年代并且标记所有存活的对象，从“初始化标记”阶段找到的GC Roots开始。并发标记的特点是和应用程序线程同时运行。并不是老年代的所有存活对象都会被标记，因为标记的同时应用程序会改变一些对象的引用等", false),

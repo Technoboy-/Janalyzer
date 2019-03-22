@@ -1,6 +1,7 @@
 package org.janalyzer.gc.cms;
 
 import org.janalyzer.gc.*;
+import org.janalyzer.gc.cms.phase.CMSPhase;
 import org.janalyzer.util.Optional;
 import org.janalyzer.util.StringUtils;
 import java.util.Arrays;
@@ -125,7 +126,7 @@ public class CMSGCAction implements GCAction<Optional<List<GCData>>> {
 
         @Override
         public Optional<GCPhase> phase() {
-            return Optional.empty();
+            return Optional.of(new GCPhase(CMSPhase.CMS_FULL_GC.name(), CMSPhase.CMS_FULL_GC.isSTW()));
         }
     }
 }

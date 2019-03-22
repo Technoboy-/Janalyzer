@@ -1,13 +1,11 @@
 package org.janalyzer.gc.g1;
 
 import org.janalyzer.gc.*;
-import org.janalyzer.util.CollectionUtils;
+import org.janalyzer.gc.g1.phase.G1Phase;
 import org.janalyzer.util.Optional;
 import org.janalyzer.util.StringUtils;
-import sun.misc.GC;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -122,7 +120,7 @@ public class G1GCAction implements GCAction<Optional<List<GCData>>> {
 
         @Override
         public Optional<GCPhase> phase() {
-            return Optional.empty();
+            return Optional.of(new GCPhase(G1Phase.G1_FULL_GC.name(), G1Phase.G1_FULL_GC.isSTW()));
         }
     }
 }
